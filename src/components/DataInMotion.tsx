@@ -55,23 +55,24 @@ function ParticleField({ seconds }: { seconds: number }) {
     <text x="320" y="259" textAnchor="middle" fill="#a5a8b3" fontSize="11" letterSpacing="2">RAW SIGNALS → STRUCTURED DATA</text>
   </svg>
 }
-function ProductionFlow({ seconds }: { seconds: number }) {
-  const [selected, setSelected] = useState<number | null>(null)
-  const xs = [76, 239, 401, 564]
-  return <><svg className="motion-svg" viewBox="0 0 640 224" role="img" aria-label="Interactive BMO production pipeline: S3 to Glue to validation to reporting">
-    {xs.slice(0, 3).map((x, i) => <line key={i} x1={x + 46} y1="105" x2={xs[i + 1] - 46} y2="105" stroke="#858996" strokeDasharray="4 5" />)}
-    {Array.from({ length: 65 }, (_, i) => {
-      const p = seconds >= 12 ? 1 : (i / 65 + seconds * .12) % 1
-      const z = p * 3, segment = Math.min(2, Math.floor(z)), f = z - segment
-      return <circle key={i} cx={xs[segment] + 46 + (xs[segment + 1] - xs[segment] - 92) * f} cy={105 + (i % 7 - 3) * 3} r="2.3" fill={i % 6 === 0 ? '#9da9c5' : '#e8e9f0'} opacity={.2 + .8 * Math.sin(Math.PI * f)} />
-    })}
-    {stages.map((stage, i) => <g key={stage.name} role="button" tabIndex={0} aria-label={`Learn about ${stage.name}`} onClick={() => setSelected(i)} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelected(i) } }} className="motion-node">
-      <rect x={xs[i] - 45} y="67" width="90" height="76" rx="11" fill={selected === i ? '#292d37' : '#1a1b21'} stroke={selected === i ? '#f1f1f3' : '#888b98'} />
-      <text x={xs[i]} y="99" textAnchor="middle" fill="#f1f1f3" fontSize="12" fontWeight="700">{stage.name}</text>
-      <text x={xs[i]} y="121" textAnchor="middle" fill="#a4a6b1" fontSize="10">{stage.subtitle}</text>
-    </g>)}
-    <text x="320" y="209" textAnchor="middle" fill="#a5a8b3" fontSize="11" letterSpacing="1">AIRFLOW · 150+ DAILY PRODUCTION RUNS</text>
-  </svg><div className="motion-stages">{stages.map((stage, i) => <div className="motion-stage" key={stage.name}><strong>{stage.name}</strong><small>{stage.subtitle}</small><div className="motion-track"><i style={{ width: `${Math.max(0, Math.min(100, (seconds * .55 % 4 - i) * 100))}%` }} /></div></div>)}</div><div className="motion-detail" aria-live="polite"><strong>{selected === null ? 'Explore the pipeline' : stages[selected].name}</strong><p>{selected === null ? 'Select a stage above to explore its role in the production workflow.' : stages[selected].detail}</p></div></>
+function Orbit({ seconds }: { seconds: number }) {
+  const positions = [[350,35],[570,113],[490,286],[210,286],[130,113]]
+  const labels = ['S3','GLUE','QUALITY','REDSHIFT','REPORT']
+  return <div className="motion-visual"><div className="motion-visual-header"><small>01 / INFRASTRUCTURE</small><strong>Cloud Infrastructure Orbit</strong><span>{seconds >= 12 ? 'COMPLETE' : 'PASS ' + (Math.floor(seconds / 6) + 1) + ' / 2'}</span></div><svg className="motion-svg" viewBox="0 0 700 340" role="img" aria-label="Airflow orchestrating S3, Glue, Quality, Redshift and Reporting">
+    <circle cx="350" cy="166" r="118" fill="none" stroke="#30445c" strokeDasharray="5 7"/><circle cx="350" cy="166" r="84" fill="none" stroke="#203247"/>
+    {positions.map(([x,y],i)=><g key={i}><line x1="350" y1="166" x2={x} y2={y} stroke="#334b66" strokeDasharray="4 5"/><rect x={x-52} y={y-27} width="104" height="54" rx="10" fill="#152131" stroke="#68829f"/><text x={x} y={y+4} textAnchor="middle" fill="#f1f5f9" fontSize="13" fontWeight="700">{labels[i]}</text></g>)}
+    {Array.from({length:45},(_,i)=>{const angle=i*.78+seconds*.65,r=105+i%7*6;return <circle key={i} cx={350+Math.cos(angle)*r} cy={166+Math.sin(angle)*r*.75} r={i%6===0?3:2} fill={i%4===0?'#c4b5fd':'#7dd3fc'}/>})}
+    <rect x="292" y="139" width="116" height="54" rx="10" fill="#152131" stroke="#68829f"/><text x="350" y="160" textAnchor="middle" fill="#f1f5f9" fontSize="13" fontWeight="700">AIRFLOW</text><text x="350" y="178" textAnchor="middle" fill="#94a3b8" fontSize="9">ORCHESTRATION</text>
+  </svg><p>S3 · Glue · Quality · Redshift · Reporting — orchestrated with Airflow</p></div>
+}
+function TransformationMatrix({ seconds }: { seconds: number }) {
+  const pct=Math.round(Math.min(100,seconds/12*100))
+  return <div className="motion-visual"><div className="motion-visual-header"><small>02 / DATA PROCESSING</small><strong>Data Transformation Matrix</strong><span>{seconds>=12?'COMPLETE':'PASS '+(Math.floor(seconds/6)+1)+' / 2'}</span></div><svg className="motion-svg" viewBox="0 0 700 300" role="img" aria-label="Raw data particles becoming curated data through PySpark and SQL">
+    {Array.from({length:9},(_,i)=><line key={'h'+i} x1="210" x2="490" y1={35+i*27} y2={35+i*27} stroke="#203247"/>)}
+    {Array.from({length:14},(_,i)=><line key={'v'+i} x1={210+i*21.5} x2={210+i*21.5} y1="35" y2="251" stroke="#203247"/>)}
+    {Array.from({length:100},(_,i)=>{const progress=(i/100+seconds/4.2)%1,x=45+610*progress,raw=145+Math.sin(i*2.4)*103,grid=65+Math.floor(i/14)*24;return <circle key={i} cx={x} cy={raw*(1-progress)+grid*progress} r={i%8===0?2.8:1.6} fill={i%7===0?'#c4b5fd':'#7dd3fc'}/>})}
+    <rect x="274" y="103" width="152" height="90" rx="16" fill="#152131" stroke="#7185a1"/><text x="350" y="141" textAnchor="middle" fill="#f1f5f9" fontSize="16" fontWeight="700">TRANSFORM</text><text x="350" y="168" textAnchor="middle" fill="#94a3b8" fontSize="11">PYSPARK / SQL</text><text x="93" y="156" textAnchor="middle" fill="#cbd5e1" fontSize="13">RAW</text><text x="608" y="156" textAnchor="middle" fill="#cbd5e1" fontSize="13">CURATED</text>
+  </svg><div className="motion-progress-label"><span>RAW → TRANSFORM → CURATED</span><span>{pct}%</span></div><div className="motion-progress"><i style={{width:pct+'%'}}/></div></div>
 }
 export function DataInMotion() {
   const seconds = useMotion()
@@ -79,7 +80,7 @@ export function DataInMotion() {
     <div className="motion-heading"><div><span className="motion-eyebrow">ABINAV S. / DATA ENGINEERING</span><h2>Data.<br /><em>In Motion.</em></h2><p>Building, optimizing and operating production pipelines that turn complex raw data into trustworthy, analytics-ready information.</p></div></div>
     <div className="motion-metrics">{metrics.slice(0, 4).map(metric => <Metric key={metric.label} {...metric} seconds={seconds} />)}</div>
     <div className="motion-section"><div className="motion-section-label">01 / WHAT I DO</div><div className="motion-panel"><h3>From complexity to clarity.</h3><p>Ingestion · Transformation · Validation · Orchestration · Delivery</p><ParticleField seconds={seconds} /></div><p className="motion-description">I work across Python, SQL, Airflow and AWS to develop resilient ETL workflows, enforce data quality, improve performance and maintain production reliability.</p></div>
-    <div className="motion-section"><div className="motion-section-label">02 / BMO PRODUCTION</div><h3 className="motion-section-title">Built for reliability.</h3><p className="motion-description">Financial data pipelines at Virtusa for BMO, from raw ingestion to validated downstream reporting and L3 operational ownership.</p><div className="motion-panel"><div className="motion-panel-top"><strong>PRODUCTION DATA FLOW</strong><span>VIRTUSA · BMO</span></div><ProductionFlow seconds={seconds} /></div><div className="motion-metrics motion-metrics-secondary">{metrics.slice(4).map(metric => <Metric key={metric.label} {...metric} seconds={seconds} />)}<div className="motion-metric"><strong>L3</strong><span>Production ownership</span></div></div></div>
+    <div className="motion-section"><div className="motion-section-label">02 / BMO PRODUCTION</div><h3 className="motion-section-title">Built for reliability.</h3><p className="motion-description">Financial data pipelines at Virtusa for BMO, from raw ingestion to validated downstream reporting and L3 operational ownership.</p><Orbit seconds={seconds} /><TransformationMatrix seconds={seconds} /><div className="motion-metrics motion-metrics-secondary">{metrics.slice(4).map(metric => <Metric key={metric.label} {...metric} seconds={seconds} />)}<div className="motion-metric"><strong>L3</strong><span>Production ownership</span></div></div></div>
     <p className="motion-disclaimer">Animated counters display resume-reported achievements, not live BMO telemetry. Pipeline particles are illustrative.</p>
   </section>
 }
