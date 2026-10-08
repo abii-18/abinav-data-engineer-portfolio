@@ -20,21 +20,21 @@ function useMotion() {
   const [seconds, setSeconds] = useState(0)
   const time = useRef(0)
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setSeconds(12); return }
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setSeconds(18); return }
     let frame = 0, previous = 0
     const tick = (now: number) => {
-      if (previous) time.current = Math.min(12, time.current + Math.min((now - previous) / 1000, .06))
+      if (previous) time.current = Math.min(18, time.current + Math.min((now - previous) / 1000, .06))
       previous = now
       setSeconds(time.current)
-      if (time.current < 12) frame = requestAnimationFrame(tick)
+      if (time.current < 18) frame = requestAnimationFrame(tick)
     }
     frame = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(frame)
   }, [])
   return seconds
 }
-function Metric({ value, suffix, kind, label, seconds }: typeof metrics[number] & { seconds: number }) {
-  const phase = seconds >= 12 ? 1 : (seconds % 6) / 6
+function Metric({ value, suffix, kind, label, seconds, cycles = 2 }: typeof metrics[number] & { seconds: number; cycles?: number }) {
+  const phase = seconds >= cycles * 6 ? 1 : (seconds % 6) / 6
   const progress = phase < .75 ? 1 - Math.pow(1 - phase / .75, 3) : 1
   return <div className="motion-metric"><strong>{format(value * progress, kind)}{suffix}</strong><span>{label}</span></div>
 }
@@ -58,7 +58,7 @@ function ParticleField({ seconds }: { seconds: number }) {
 function Orbit({ seconds }: { seconds: number }) {
   const positions = [[350,35],[570,113],[490,286],[210,286],[130,113]]
   const labels = ['S3','GLUE','QUALITY','REDSHIFT','REPORT']
-  return <div className="motion-visual"><div className="motion-visual-header"><small>01 / INFRASTRUCTURE</small><strong>Cloud Infrastructure Orbit</strong><span>{seconds >= 12 ? 'COMPLETE' : 'PASS ' + (Math.floor(seconds / 6) + 1) + ' / 2'}</span></div><svg className="motion-svg" viewBox="0 0 700 340" role="img" aria-label="Airflow orchestrating S3, Glue, Quality, Redshift and Reporting">
+  return <div className="motion-visual"><div className="motion-visual-header"><small>01 / INFRASTRUCTURE</small><strong>Cloud Infrastructure Orbit</strong><span>{seconds >= 18 ? 'COMPLETE' : 'PASS ' + (Math.floor(seconds / 6) + 1) + ' / 3'}</span></div><svg className="motion-svg" viewBox="0 0 700 340" role="img" aria-label="Airflow orchestrating S3, Glue, Quality, Redshift and Reporting">
     <circle cx="350" cy="166" r="118" fill="none" stroke="#30445c" strokeDasharray="5 7"/><circle cx="350" cy="166" r="84" fill="none" stroke="#203247"/>
     {positions.map(([x,y],i)=><g key={i}><line x1="350" y1="166" x2={x} y2={y} stroke="#334b66" strokeDasharray="4 5"/><rect x={x-52} y={y-27} width="104" height="54" rx="10" fill="#152131" stroke="#68829f"/><text x={x} y={y+4} textAnchor="middle" fill="#f1f5f9" fontSize="13" fontWeight="700">{labels[i]}</text></g>)}
     {Array.from({length:45},(_,i)=>{const angle=i*.78+seconds*.65,r=105+i%7*6;return <circle key={i} cx={350+Math.cos(angle)*r} cy={166+Math.sin(angle)*r*.75} r={i%6===0?3:2} fill={i%4===0?'#c4b5fd':'#7dd3fc'}/>})}
@@ -66,8 +66,8 @@ function Orbit({ seconds }: { seconds: number }) {
   </svg><p>S3 · Glue · Quality · Redshift · Reporting — orchestrated with Airflow</p></div>
 }
 function TransformationMatrix({ seconds }: { seconds: number }) {
-  const pct=Math.round(Math.min(100,seconds/12*100))
-  return <div className="motion-visual"><div className="motion-visual-header"><small>02 / DATA PROCESSING</small><strong>Data Transformation Matrix</strong><span>{seconds>=12?'COMPLETE':'PASS '+(Math.floor(seconds/6)+1)+' / 2'}</span></div><svg className="motion-svg" viewBox="0 0 700 300" role="img" aria-label="Raw data particles becoming curated data through PySpark and SQL">
+  const pct=Math.round(Math.min(100,seconds/18*100))
+  return <div className="motion-visual"><div className="motion-visual-header"><small>02 / DATA PROCESSING</small><strong>Data Transformation Matrix</strong><span>{seconds>=18?'COMPLETE':'PASS '+(Math.floor(seconds/6)+1)+' / 3'}</span></div><svg className="motion-svg" viewBox="0 0 700 300" role="img" aria-label="Raw data particles becoming curated data through PySpark and SQL">
     {Array.from({length:9},(_,i)=><line key={'h'+i} x1="210" x2="490" y1={35+i*27} y2={35+i*27} stroke="#203247"/>)}
     {Array.from({length:14},(_,i)=><line key={'v'+i} x1={210+i*21.5} x2={210+i*21.5} y1="35" y2="251" stroke="#203247"/>)}
     {Array.from({length:100},(_,i)=>{const progress=(i/100+seconds/4.2)%1,x=45+610*progress,raw=145+Math.sin(i*2.4)*103,grid=65+Math.floor(i/14)*24;return <circle key={i} cx={x} cy={raw*(1-progress)+grid*progress} r={i%8===0?2.8:1.6} fill={i%7===0?'#c4b5fd':'#7dd3fc'}/>})}
@@ -76,11 +76,12 @@ function TransformationMatrix({ seconds }: { seconds: number }) {
 }
 export function DataInMotion() {
   const seconds = useMotion()
+  const firstSectionSeconds = Math.min(seconds, 12)
   return <section className="data-motion" aria-label="Data engineering in motion">
     <div className="motion-heading"><div><span className="motion-eyebrow">ABINAV S. / DATA ENGINEERING</span><h2>Data.<br /><em>In Motion.</em></h2><p>Building, optimizing and operating production pipelines that turn complex raw data into trustworthy, analytics-ready information.</p></div></div>
-    <div className="motion-metrics">{metrics.slice(0, 4).map(metric => <Metric key={metric.label} {...metric} seconds={seconds} />)}</div>
-    <div className="motion-section"><div className="motion-section-label">01 / WHAT I DO</div><div className="motion-panel"><h3>From complexity to clarity.</h3><p>Ingestion · Transformation · Validation · Orchestration · Delivery</p><ParticleField seconds={seconds} /></div><p className="motion-description">I work across Python, SQL, Airflow and AWS to develop resilient ETL workflows, enforce data quality, improve performance and maintain production reliability.</p></div>
-    <div className="motion-section"><div className="motion-section-label">02 / BMO PRODUCTION</div><h3 className="motion-section-title">Built for reliability.</h3><p className="motion-description">Financial data pipelines at Virtusa for BMO, from raw ingestion to validated downstream reporting and L3 operational ownership.</p><Orbit seconds={seconds} /><TransformationMatrix seconds={seconds} /><div className="motion-metrics motion-metrics-secondary">{metrics.slice(4).map(metric => <Metric key={metric.label} {...metric} seconds={seconds} />)}<div className="motion-metric"><strong>L3</strong><span>Production ownership</span></div></div></div>
+    <div className="motion-metrics">{metrics.slice(0, 4).map(metric => <Metric key={metric.label} {...metric} seconds={firstSectionSeconds} />)}</div>
+    <div className="motion-section"><div className="motion-section-label">01 / WHAT I DO</div><div className="motion-panel"><h3>From complexity to clarity.</h3><p>Ingestion · Transformation · Validation · Orchestration · Delivery</p><ParticleField seconds={firstSectionSeconds} /></div><p className="motion-description">I work across Python, SQL, Airflow and AWS to develop resilient ETL workflows, enforce data quality, improve performance and maintain production reliability.</p></div>
+    <div className="motion-section"><div className="motion-section-label">02 / BMO PRODUCTION</div><h3 className="motion-section-title">Built for reliability.</h3><p className="motion-description">Financial data pipelines at Virtusa for BMO, from raw ingestion to validated downstream reporting and L3 operational ownership.</p><Orbit seconds={seconds} /><TransformationMatrix seconds={seconds} /><div className="motion-metrics motion-metrics-secondary">{metrics.slice(4).map(metric => <Metric key={metric.label} {...metric} seconds={seconds} cycles={3} />)}<div className="motion-metric"><strong>L3</strong><span>Production ownership</span></div></div></div>
     <p className="motion-disclaimer">Animated counters display resume-reported achievements, not live BMO telemetry. Pipeline particles are illustrative.</p>
   </section>
 }
