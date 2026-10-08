@@ -50,7 +50,7 @@ function ParticleField({ seconds }: { seconds: number }) {
       const y = 125 + Math.sin(angle + seconds * .1) * radius * .82
       const gx = 205 + (i % 19) * 12.6
       const gy = 46 + Math.floor(i / 19) * 16
-      return <circle key={i} cx={x * (1 - blend) + gx * blend} cy={y * (1 - blend) + gy * blend} r={i % 8 === 0 ? 2.8 : 1.7} fill={i % 7 === 0 ? '#98a7c7' : '#e6e7ef'} opacity={.28 + .72 * blend} />
+      return <circle key={i} cx={x * (1 - blend) + gx * blend} cy={y * (1 - blend) + gy * blend} r={i % 8 === 0 ? 2.8 : 1.7} fill={i % 7 === 0 ? '#bcbcbc' : '#e6e7ef'} opacity={.28 + .72 * blend} />
     })}
     <text x="320" y="259" textAnchor="middle" fill="#a5a8b3" fontSize="11" letterSpacing="2">RAW SIGNALS → STRUCTURED DATA</text>
   </svg>
