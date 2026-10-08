@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import './DataInMotion.css'
 
 const metrics = [
-  { value: 5000000, suffix: '+', kind: 'million', label: 'Financial records / day' },
+  { value: 5000000, suffix: '+', kind: 'million', label: 'Events/day' },
   { value: 99.9, suffix: '%', kind: 'decimal', label: 'Pipeline success' },
   { value: 150, suffix: '+', kind: 'integer', label: 'Daily production runs' },
   { value: 40, suffix: '%', kind: 'integer', label: 'Faster queries' },
