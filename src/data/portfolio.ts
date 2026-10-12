@@ -1,6 +1,6 @@
 export const profile = {
   name: 'Abinav S',
-  email: 'abinavv018@gmail.com',
+  email: 'abinavvs.03@gmail.com',
   phone: '+91 7550338392',
   github: 'https://github.com/abii-18',
   linkedin: 'https://linkedin.com/in/abinav-s18',
