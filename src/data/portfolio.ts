@@ -14,7 +14,7 @@ export const skillGroups = [
 ]
 
 export const impact = [
-  ['5M+', 'financial records processed daily'],
+  ['50M+', 'financial records processed daily'],
   ['99.9%', 'production pipeline success rate'],
   ['150+', 'daily production workflow runs'],
   ['3×', 'faster Redshift loads'],
