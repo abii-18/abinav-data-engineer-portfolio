@@ -38,6 +38,91 @@ function Metric({ value, suffix, kind, label, seconds }: typeof metrics[number] 
   const progress = phase < .75 ? 1 - Math.pow(1 - phase / .75, 3) : 1
   return <div className="motion-metric"><strong>{format(value * progress, kind)}{suffix}</strong><span>{label}</span></div>
 }
+
+function SortingStudio() {
+  const canvas = useRef<HTMLCanvasElement>(null)
+  const [stats,setStats]=useState([0,0,0,0,0])
+  const [batch,setBatch]=useState(0)
+  const traces=useRef<number[][]>(Array.from({length:5},()=>Array(24).fill(0)))
+  useEffect(()=>{
+    const el=canvas.current;if(!el)return
+    const ctx=el.getContext('2d');if(!ctx)return
+    const g=ctx,folders=[{x:425,y:48,w:245,h:146,n:'01 / INGESTED',s:'RAW LANDING ZONE'},{x:695,y:48,w:245,h:146,n:'02 / CLEANED',s:'TRANSFORMED'},{x:695,y:247,w:245,h:146,n:'03 / VALIDATED',s:'QUALITY CHECKS'},{x:425,y:247,w:245,h:146,n:'04 / CURATED',s:'ANALYTICS READY'}]
+    const interval=.55,travel=1.5,step=1.72,life=step*4+1.3,per=42
+    type Tile={id:number,created:number,src:number[],slots:number[][]}
+    const events:Tile[]=[]
+    let next=0,origin=0,frame=0,last=-1
+    const clamp=(v:number)=>Math.max(0,Math.min(1,v)),ease=(v:number)=>v*v*(3-2*v)
+    const text=(s:string,x:number,y:number,size=11,color='#ddd',bold=false)=>{g.fillStyle=color;g.font=(bold?'bold ':'')+size+'px system-ui';g.fillText(s,x,y)}
+    const line=(x:number,y:number,X:number,Y:number)=>{g.beginPath();g.moveTo(x,y);g.lineTo(X,Y);g.stroke()}
+    const box=(x:number,y:number,w:number,h:number,fill='#191919',stroke='#444',r=7)=>{g.fillStyle=fill;g.strokeStyle=stroke;g.lineWidth=1;g.beginPath();g.roundRect(x,y,w,h,r);g.fill();g.stroke()}
+    function spawn(b:number){for(let i=0;i<per;i++){const id=b*per+i,a=id*2.39996,r=18+(id*37%140);events.push({id,created:b*interval,src:[195+Math.cos(a)*r,231+Math.sin(a)*r*.87],slots:folders.map((f,j)=>{const s=(id*13+j*19)%100;return[f.x+14+(s%13)*16.4,f.y+46+Math.floor(s/13)*11]})})}}
+    function draw(now:number){
+      if(!el.isConnected)return
+      if(!origin)origin=now;const t=(now-origin)/1000
+      while(next*interval<=t){spawn(next);next++}
+      while(events.length&&t-events[0].created>life)events.splice(0,per)
+      g.fillStyle='#0c0c0c';g.fillRect(0,0,1000,840)
+      text('UNSTRUCTURED EVENTS',98,32,15,'#eee',true);text('INCOMING RAW STREAM',98,49,10,'#999')
+      g.strokeStyle='#303030';g.beginPath();g.ellipse(195,231,171,156,0,0,Math.PI*2);g.stroke()
+      const counts=[0,0,0,0],inside=[0,0,0,0];let moving=0
+      const active:{e:Tile,stage:number,done:boolean,x:number,y:number,p:number}[]=[]
+      for(const e of events){
+        const age=t-e.created;if(age<0||age>=life)continue
+        let stage=4,done=true,p=1,x=550,y=437
+        if(age<step*4){stage=Math.floor(age/step);const local=age-stage*step,delay=(.5+.5*Math.sin(e.id*.713))*.35;p=ease(clamp((local-delay)/(travel-delay)));done=local>=travel
+          const a=stage?e.slots[stage-1]:e.src,b=e.slots[stage],arc=Math.sin(p*Math.PI)
+          x=done?b[0]:a[0]+(b[0]-a[0])*p+arc*Math.cos(t*1.8+e.id*.713)*24
+          y=done?b[1]:a[1]+(b[1]-a[1])*p+arc*Math.sin(t*1.8+e.id*.713)*20
+        }
+        active.push({e,stage,done,x,y,p})
+        if(stage<4&&done)inside[stage]++
+        if(!done)moving++
+        for(let j=0;j<4;j++)if(stage>j||(stage===j&&done))counts[j]++
+      }
+      folders.forEach((f,j)=>{box(f.x,f.y,f.w,f.h,'#191919',inside[j]?'#bbb':'#555',9);g.fillStyle='#444';g.fillRect(f.x+9,f.y-6,70,7);text(f.n,f.x+12,f.y+18,12,'#eee',true);text(f.s,f.x+12,f.y+33,9,'#aaa');g.strokeStyle='#383838';line(f.x+10,f.y+39,f.x+f.w-10,f.y+39);text(inside[j]+' EVENTS IN STAGE',f.x+12,f.y+f.h-9,9,'#888')})
+      g.strokeStyle='#777';g.setLineDash([5,7]);line(372,127,422,127);line(671,127,692,127);line(820,194,820,244);line(695,322,674,322);g.setLineDash([])
+      for(const {e,stage,done,x,y,p} of active){if(stage===4)continue
+        const size=done?9:8+(e.id%5),tone=['#fff','#bbb','#777','#ddd','#666'][e.id%5]
+        g.save();g.translate(x,y);g.rotate(done?0:Math.sin(e.id*.713)*Math.sin(p*Math.PI)*.5);g.globalAlpha=.75
+        g.fillStyle='#111';g.strokeStyle=tone;g.lineWidth=.8;g.fillRect(-size/2,-size*.36,size,size*.72);g.strokeRect(-size/2,-size*.36,size,size*.72);g.fillStyle=tone;g.fillRect(-size*.3,-size*.2,size*.37,size*.35);g.restore()
+      }
+      g.strokeStyle='#aaa';g.lineWidth=1.8;g.setLineDash([5,6]);line(549,393,549,466);g.setLineDash([])
+      text('DOWNSTREAM / BI',574,434,10,'#bbb',true)
+      for(let i=0;i<6;i++){const y=399+((t*115+i*15)%65);g.fillStyle='#ddd';g.fillRect(547,y,4,7)}
+      const X=425,Y=482,ready=counts[3],intensity=clamp(ready/100)
+      box(X,Y,518,324,'#151515','#777',10);text('OPERATIONS ANALYTICS',X+15,Y+24,15,'#fff',true);text('Executive overview / Curated event reporting',X+15,Y+41,10,'#999')
+      box(X+379,Y+12,125,28,'#222','#444',5);text('LAST 24 HOURS',X+389,Y+30,10,'#ddd',true)
+      const cards=[['EVENTS READY',ready.toLocaleString('en-US')],['DATA QUALITY','98.6%'],['PIPELINE SLA','99.9%'],['AVG LATENCY','1.24s']]
+      cards.forEach((v,i)=>{const x=X+15+i*124,y=Y+55;box(x,y,116,66,'#222','#383838',5);text(v[0],x+8,y+16,9,'#aaa');text(v[1],x+8,y+40,19,'#eee',true);text(i===0?'CURATED':i===1?'QUALITY PASSED':i===2?'HEALTHY':'PROCESSING',x+8,y+57,9,'#bbb')})
+      const bx=X+15,by=Y+135;box(bx,by,290,131,'#1c1c1c','#363636',6);text('Event Volume',bx+12,by+19,12,'#eee',true);text('Ingestion trend / hourly',bx+12,by+34,9,'#888')
+      g.strokeStyle='#343434';for(let i=0;i<3;i++)line(bx+12,by+52+i*25,bx+278,by+52+i*25)
+      for(let i=0;i<12;i++){const h=(.3+.55*Math.abs(Math.sin(i*.8+.4))+.08*Math.sin(t+i))*68*intensity;g.fillStyle=i===11?'#fff':i%2?'#aaa':'#666';g.fillRect(bx+17+i*22,by+112-h,12,h)}
+      const px=X+314,py=Y+135;box(px,py,189,131,'#1c1c1c','#363636',6);text('Quality Breakdown',px+11,py+19,11,'#eee',true)
+      g.lineWidth=11;g.strokeStyle='#444';g.beginPath();g.arc(px+59,py+77,30,0,Math.PI*2);g.stroke();g.strokeStyle='#ddd';g.beginPath();g.arc(px+59,py+77,30,-Math.PI/2,-Math.PI/2+Math.PI*1.75*intensity);g.stroke();text(Math.round(intensity*98)+'%',px+45,py+81,13,'#eee',true);text('VALID',px+107,py+68,10,'#ddd');text('REVIEW',px+107,py+88,10,'#999');text('RETRY',px+107,py+108,10,'#777')
+      text('PROCESSING THROUGHPUT',X+16,Y+284,10,'#bbb',true);g.strokeStyle='#ddd';g.lineWidth=1.7;g.beginPath();for(let i=0;i<25;i++){const x=X+16+i*11.5,y=Y+312-(.3+i*.02+Math.sin(t+i*.55)*.15)*28*intensity;if(!i)g.moveTo(x,y);else g.lineTo(x,y)}g.stroke()
+      text('RECENT ACTIVITY',X+318,Y+284,10,'#bbb',true);text('Curated batch '+Math.max(1,next-3),X+318,Y+299,9,'#ddd');text('Quality checks passed',X+318,Y+312,9,'#999')
+      if(Math.floor(t*8)!==last){last=Math.floor(t*8);const values=[active.length,...counts];setStats(values);setBatch(next);values.forEach((v,i)=>{traces.current[i].push(v);traces.current[i].shift()})}
+      frame=requestAnimationFrame(draw)
+    }
+    frame=requestAnimationFrame(draw)
+    return()=>cancelAnimationFrame(frame)
+  },[])
+  return <div className="sorting-studio">
+    <div className="sorting-live"><span className="sorting-pulse"/>LIVE SIMULATION <small>0.55s / BATCH</small></div>
+    <div className="sorting-metrics">{['TOTAL EVENTS','INGESTED','CLEANED','VALIDATED','CURATED'].map((label,i)=>{
+      const values=traces.current[i],min=Math.min(...values),max=Math.max(...values),range=Math.max(1,max-min)
+      return <div className="sorting-metric" key={label}><span>{label}</span><strong>{stats[i].toLocaleString('en-US')}</strong>
+        <svg viewBox="0 0 100 28" preserveAspectRatio="none" aria-hidden="true"><polyline fill="none" stroke="#ddd" strokeWidth="1.5" points={values.map((v,j)=>`${j*99/(values.length-1)},${24-(v-min)/range*19}`).join(' ')}/></svg>
+        <div className="sorting-track"><i style={{width:(i===0?100:stats[0]?stats[i]/stats[0]*100:0)+'%'}}/></div><small>{['RAW INPUT','S3 LANDING','TRANSFORM','QUALITY','BI READY'][i]}</small></div>
+    })}</div>
+    <div className="sorting-flow">RAW STREAM <i/> PROCESSING <i/> ANALYTICS READY</div>
+    <canvas ref={canvas} width={1000} height={840} aria-label="Animated simulated pipeline from unstructured events through ingestion, cleaning, validation, curation and a downstream BI dashboard"/>
+    <div className="sorting-foot">CONTINUOUS INGESTION → DOWNSTREAM BI <span>BATCH {batch}</span></div>
+    <p className="sorting-note">Illustrative simulation, not live production telemetry. Dashboard SLA and quality figures are illustrative.</p>
+  </div>
+}
+
 function ParticleField({ seconds }: { seconds: number }) {
   const blend = seconds < 0 ? 1 : (1 - Math.cos(seconds * .9)) / 2
   return <svg className="motion-svg" viewBox="0 0 640 270" role="img" aria-label="Animated raw data particles organizing into a structured grid">
@@ -79,8 +164,8 @@ export function DataInMotion() {
   const firstSectionSeconds = seconds
   return <section className="data-motion" aria-label="Data engineering in motion">
     <div className="motion-heading"><div><span className="motion-eyebrow">ABINAV S. / DATA ENGINEERING</span><h2>Data.<br /><em>In Motion.</em></h2><p>Building, optimizing and operating production pipelines that turn complex raw data into trustworthy, analytics-ready information.</p></div></div>
-    <div className="motion-metrics">{metrics.slice(0, 4).map(metric => <Metric key={metric.label} {...metric} seconds={firstSectionSeconds} />)}</div>
-    <div className="motion-section"><div className="motion-section-label">01 / WHAT I DO</div><div className="motion-panel"><h3>From complexity to clarity.</h3><p>Ingestion · Transformation · Validation · Orchestration · Delivery</p><ParticleField seconds={firstSectionSeconds} /></div><p className="motion-description">I work across Python, SQL, Airflow and AWS to develop resilient ETL workflows, enforce data quality, improve performance and maintain production reliability.</p></div>
+    
+    <div className="motion-section"><div className="motion-section-label">01 / WHAT I DO</div><SortingStudio /><p className="motion-description">I work across Python, SQL, Airflow and AWS to develop resilient ETL workflows, enforce data quality, improve performance and maintain production reliability.</p></div>
     <div className="motion-section"><div className="motion-section-label">02 / BMO PRODUCTION</div><h3 className="motion-section-title">Built for reliability.</h3><p className="motion-description">Financial data pipelines at Virtusa for BMO, from raw ingestion to validated downstream reporting and L3 operational ownership.</p><Orbit seconds={seconds} /><TransformationMatrix seconds={seconds} /><div className="motion-metrics motion-metrics-secondary">{metrics.slice(4).map(metric => <Metric key={metric.label} {...metric} seconds={seconds} />)}<div className="motion-metric"><strong>L3</strong><span>Production ownership</span></div></div></div>
     <p className="motion-disclaimer">Animated counters display resume-reported achievements, not live BMO telemetry. Pipeline particles are illustrative.</p>
   </section>
