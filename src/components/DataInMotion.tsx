@@ -159,6 +159,10 @@ function TransformationMatrix({ seconds }: { seconds: number }) {
     <rect x="274" y="103" width="152" height="90" rx="16" fill="#1a1a1a" stroke="#858585"/><text x="350" y="141" textAnchor="middle" fill="#f5f5f5" fontSize="16" fontWeight="700">TRANSFORM</text><text x="350" y="168" textAnchor="middle" fill="#aaaaaa" fontSize="11">PYSPARK / SQL</text><text x="93" y="156" textAnchor="middle" fill="#d0d0d0" fontSize="13">RAW</text><text x="608" y="156" textAnchor="middle" fill="#d0d0d0" fontSize="13">CURATED</text>
   </svg><div className="motion-progress-label"><span>RAW → TRANSFORM → CURATED</span><span>{pct}%</span></div><div className="motion-progress"><i style={{width:pct+'%'}}/></div></div>
 }
+
+const achievementItems = [["50M+","Financial records / day"],["99.9%","Pipeline success rate"],["150+","Production workflows"],["40%","Faster queries"],["3×","Faster data loads"],["25%","Fewer recurring issues"],["L3","Production ownership"],["SQL","Incremental loads & deduplication"],["AWS","S3 · Glue · Lambda · Monitoring"]]
+function AchievementMarquee(){return <div className="achievement-marquee"><div className="achievement-head"><strong>ENGINEERING IMPACT</strong><span>PRODUCTION ACHIEVEMENTS</span></div><div className="achievement-window"><div className="achievement-track">{[...achievementItems,...achievementItems].map(([value,label],i)=><div className="achievement-card" key={i} aria-hidden={i>=achievementItems.length}><strong>{value}</strong><span>{label}</span></div>)}</div></div><div className="achievement-bottom"><span>VIRTUSA / DATA ENGINEERING</span><i/><span>AUTO-SCROLL</span></div></div>}
+
 export function DataInMotion() {
   const seconds = useMotion()
   const firstSectionSeconds = seconds
@@ -166,7 +170,6 @@ export function DataInMotion() {
     <div className="motion-heading"><div><span className="motion-eyebrow">ABINAV S. / DATA ENGINEERING</span><h2>Data.<br /><em>In Motion.</em></h2><p>Building, optimizing and operating production pipelines that turn complex raw data into trustworthy, analytics-ready information.</p></div></div>
     
     <div className="motion-section"><div className="motion-section-label">01 / WHAT I DO</div><SortingStudio /><p className="motion-description">I work across Python, SQL, Airflow and AWS to develop resilient ETL workflows, enforce data quality, improve performance and maintain production reliability.</p></div>
-    <div className="motion-section"><div className="motion-section-label">02 / BMO PRODUCTION</div><h3 className="motion-section-title">Built for reliability.</h3><p className="motion-description">Financial data pipelines at Virtusa for BMO, from raw ingestion to validated downstream reporting and L3 operational ownership.</p><Orbit seconds={seconds} /><TransformationMatrix seconds={seconds} /><div className="motion-metrics motion-metrics-secondary">{metrics.slice(4).map(metric => <Metric key={metric.label} {...metric} seconds={seconds} />)}<div className="motion-metric"><strong>L3</strong><span>Production ownership</span></div></div></div>
-    <p className="motion-disclaimer">Animated counters display resume-reported achievements, not live BMO telemetry. Pipeline particles are illustrative.</p>
+    <AchievementMarquee />
   </section>
 }
