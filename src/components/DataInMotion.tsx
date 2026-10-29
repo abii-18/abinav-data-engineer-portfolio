@@ -173,7 +173,7 @@ export function DataInMotion() {
   return <section className="data-motion" aria-label="Data engineering in motion">
     <div className="motion-heading"><div><span className="motion-eyebrow">ABINAV S. / DATA ENGINEERING</span><h2>Data.<br /><em>In Motion.</em></h2><p>Building, optimizing and operating production pipelines that turn complex raw data into trustworthy, analytics-ready information.</p></div></div>
     
-    <div className="motion-section"><div className="motion-section-label">01 / WHAT I DO</div><SortingStudio /><p className="motion-description">I work across Python, SQL, Airflow and AWS to develop resilient ETL workflows, enforce data quality, improve performance and maintain production reliability.</p></div>
     <AchievementMarquee />
+    <div className="motion-section"><div className="motion-section-label">01 / WHAT I DO</div><SortingStudio /><p className="motion-description">I work across Python, SQL, Airflow and AWS to develop resilient ETL workflows, enforce data quality, improve performance and maintain production reliability.</p></div>
   </section>
 }
