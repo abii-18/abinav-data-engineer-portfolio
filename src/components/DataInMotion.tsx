@@ -71,7 +71,7 @@ function SortingStudio() {
         previousCycle=currentCycle;next=0;events.length=0;last=-1
       }
       while(next<batches&&1+next*interval<=t){spawn(next);next++}
-      g.fillStyle='#0c0c0c';g.fillRect(0,0,1000,840)
+      g.fillStyle='#0c0c0c';g.fillRect(0,0,1000,1060)
       text('RAW FILES',114,420,17,'#eee',true);text(events.length+' / '+total+' FILES',114,442,12,'#999')
       for(let i=0;i<38;i++){
         const x=52+(i*67%278),y=78+(i*97%290),size=10+i%5
@@ -103,18 +103,49 @@ function SortingStudio() {
       g.strokeStyle='#aaa';g.lineWidth=1.8;g.setLineDash([5,6]);line(549,393,549,466);g.setLineDash([])
       text('DOWNSTREAM / BI',574,434,10,'#bbb',true)
       for(let i=0;i<6;i++){const y=399+((t*115+i*15)%65);g.fillStyle='#ddd';g.fillRect(547,y,4,7)}
-      const X=425,Y=482,ready=counts[3],intensity=clamp(ready/total)
-      box(X,Y,518,324,'#151515','#777',10);text('OPERATIONS ANALYTICS',X+15,Y+24,15,'#fff',true);text('Executive overview / Curated event reporting',X+15,Y+41,10,'#999')
-      box(X+379,Y+12,125,28,'#222','#444',5);text('LAST 24 HOURS',X+389,Y+30,10,'#ddd',true)
-      const cards=[['EVENTS READY',ready.toLocaleString('en-US')],['DATA QUALITY',(98.6*intensity).toFixed(1)+'%'],['PIPELINE SLA',(99.9*intensity).toFixed(1)+'%'],['AVG LATENCY',(1.24*intensity).toFixed(2)+'s']]
-      cards.forEach((v,i)=>{const x=X+15+i*124,y=Y+55;box(x,y,116,66,'#222','#383838',5);text(v[0],x+8,y+16,9,'#aaa');text(v[1],x+8,y+40,19,'#eee',true);text(i===0?'CURATED':i===1?'QUALITY PASSED':i===2?'HEALTHY':'PROCESSING',x+8,y+57,9,'#bbb')})
-      const bx=X+15,by=Y+135;box(bx,by,290,131,'#1c1c1c','#363636',6);text('Event Volume',bx+12,by+19,12,'#eee',true);text('Ingestion trend / hourly',bx+12,by+34,9,'#888')
-      g.strokeStyle='#343434';for(let i=0;i<3;i++)line(bx+12,by+52+i*25,bx+278,by+52+i*25)
-      for(let i=0;i<12;i++){const h=(.3+i*.055)*68*intensity;g.fillStyle=i===11?'#fff':i%2?'#aaa':'#666';g.fillRect(bx+17+i*22,by+112-h,12,h)}
-      const px=X+314,py=Y+135;box(px,py,189,131,'#1c1c1c','#363636',6);text('Quality Breakdown',px+11,py+19,11,'#eee',true)
-      g.lineWidth=11;g.strokeStyle='#444';g.beginPath();g.arc(px+59,py+77,30,0,Math.PI*2);g.stroke();g.strokeStyle='#ddd';g.beginPath();g.arc(px+59,py+77,30,-Math.PI/2,-Math.PI/2+Math.PI*2*.986*intensity);g.stroke();text((intensity*98.6).toFixed(1)+'%',px+45,py+81,13,'#eee',true);text('VALID',px+107,py+68,10,'#ddd');text('REVIEW',px+107,py+88,10,'#999');text('RETRY',px+107,py+108,10,'#777')
-      text('PROCESSING THROUGHPUT',X+16,Y+284,10,'#bbb',true);g.strokeStyle='#ddd';g.lineWidth=1.7;g.beginPath();for(let i=0;i<25;i++){const x=X+16+i*11.5,y=Y+312-(.15+i*.03)*28*intensity;if(!i)g.moveTo(x,y);else g.lineTo(x,y)}g.stroke()
-      text('RECENT ACTIVITY',X+318,Y+284,10,'#bbb',true);text('Curated batches '+Math.floor(ready/per)+' / '+batches,X+318,Y+299,9,'#ddd');text(ready===total?'Run complete':ready?'Processing curated events':'Waiting for curated events',X+318,Y+312,9,'#999')
+      const X=425,Y=482
+      // SQL consumes only curated batches; each result grows from zero to 42 rows.
+      const sqlCounts=Array.from({length:batches},(_,b)=>Math.floor(per*clamp((t-(1+b*interval+3*step+travel))/.45)))
+      const ready=sqlCounts.reduce((sum,count)=>sum+count,0),completed=sqlCounts.filter(count=>count===per).length
+      const running=sqlCounts.findIndex(count=>count<per),firstRow=Math.max(0,Math.min(batches-4,(running<0?batches-1:running)-2))
+      box(X,Y,518,540,'#151515','#777',10)
+      text('SQL → INSIGHTS',X+16,Y+25,16,'#fff',true)
+      text('Curated rows → query → live results',X+16,Y+44,10,'#999')
+      text(ready===total?'COMPLETE':ready?'RUNNING':'WAITING',X+403,Y+25,10,'#ddd',true)
+      const tableY=Y+60
+      box(X+15,tableY,488,151,'#111','#404040',7)
+      text('BATCH',X+28,tableY+22,10,'#aaa',true);text('RECORDS',X+199,tableY+22,10,'#aaa',true);text('STATUS',X+337,tableY+22,10,'#aaa',true)
+      for(let row=0;row<4;row++){
+        const b=firstRow+row,count=sqlCounts[b],y=tableY+49+row*29
+        g.strokeStyle='#2c2c2c';line(X+27,y+10,X+490,y+10)
+        text('batch_'+String(b+1).padStart(2,'0'),X+28,y,12,'#ddd')
+        text(count+' / '+per,X+199,y,12,'#eee',true)
+        text(count===per?'✓ COMPLETE':count?'◌ RUNNING':'○ PENDING',X+337,y,10,count?'#ddd':'#777')
+      }
+      const queryY=Y+232
+      g.strokeStyle='#aaa';g.setLineDash([3,4]);line(X+259,Y+214,X+259,queryY);g.setLineDash([])
+      box(X+15,queryY,488,88,'#202020',ready>0?'#888':'#444',7)
+      text('SQL',X+28,queryY+23,10,'#aaa',true)
+      g.fillStyle='#eee';g.font='12px monospace'
+      g.fillText('SELECT batch, COUNT(*) AS records',X+77,queryY+23)
+      g.fillText('FROM curated',X+77,queryY+43)
+      g.fillText('GROUP BY batch;',X+77,queryY+63)
+      if(ready>0&&ready<total){g.fillStyle='#fff';g.beginPath();g.arc(X+465,queryY+43,3+Math.sin(t*6),0,Math.PI*2);g.fill()}
+      const cardY=Y+345,cards=[['TOTAL RECORDS',ready.toLocaleString('en-US')],['AVG / BATCH',(ready?ready/Math.max(1,sqlCounts.filter(count=>count>0).length):0).toFixed(1)],['COMPLETION',(completed/batches*100).toFixed(1)+'%']]
+      cards.forEach(([label,value],i)=>{
+        const x=X+15+i*165
+        g.strokeStyle='#666';g.setLineDash([3,4]);line(X+259,queryY+88,x+79,cardY);g.setLineDash([])
+        box(x,cardY,158,65,'#1b1b1b','#444',6);text(label,x+11,cardY+20,10,'#aaa',true);text(value,x+11,cardY+47,22,'#eee',true)
+      })
+      const chartY=Y+425
+      box(X+15,chartY,488,100,'#111','#383838',7)
+      text('RECORDS PER BATCH',X+28,chartY+19,10,'#bbb',true)
+      g.strokeStyle='#333';line(X+43,chartY+76,X+474,chartY+76)
+      sqlCounts.forEach((count,b)=>{
+        const x=X+48+b*35,h=count/per*43
+        g.fillStyle=count===per?'#bbb':'#eee';g.fillRect(x,chartY+76-h,22,h)
+        text(String(b+1).padStart(2,'0'),x+3,chartY+91,8,'#888')
+      })
       if(Math.floor(t*8)!==last){last=Math.floor(t*8);const values=[events.length,...counts];setStats(values);setBatch(next)}
       frame=requestAnimationFrame(draw)
     }
@@ -135,9 +166,9 @@ function SortingStudio() {
       })}
     </div>
     <div className="sorting-flow">RAW STREAM <i/> PROCESSING <i/> ANALYTICS READY</div>
-    <canvas ref={canvas} width={1000} height={840} aria-label="Animated simulated pipeline from scattered raw files through ingestion, cleaning, validation, curation and a downstream BI dashboard"/>
+    <canvas ref={canvas} width={1000} height={1060} aria-label="Animated simulated pipeline from scattered raw files through ingestion, cleaning, validation, curation and a live SQL query, result metrics and records-per-batch chart"/>
     <div className="sorting-foot">ZERO → INGEST → CURATE → COMPLETE <span>BATCH {batch}</span></div>
-    <p className="sorting-note">Illustrative simulation, not live production telemetry. Dashboard SLA and quality figures are illustrative.</p>
+    <p className="sorting-note">Illustrative simulation, not live production telemetry. SQL results count the simulated curated batches from zero to completion.</p>
   </div>
 }
 
