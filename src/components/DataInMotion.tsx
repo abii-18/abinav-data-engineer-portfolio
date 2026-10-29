@@ -58,7 +58,7 @@ function SortingStudio() {
     const box=(x:number,y:number,w:number,h:number,fill='#191919',stroke='#444',r=7)=>{g.fillStyle=fill;g.strokeStyle=stroke;g.lineWidth=1;g.beginPath();g.roundRect(x,y,w,h,r);g.fill();g.stroke()}
     function spawn(b:number){for(let i=0;i<per;i++){const id=b*per+i,a=id*2.39996,r=18+(id*37%140);events.push({id,created:b*interval,src:[195+Math.cos(a)*r,231+Math.sin(a)*r*.87],slots:folders.map((f,j)=>{const s=(id*13+j*19)%100;return[f.x+14+(s%13)*16.4,f.y+46+Math.floor(s/13)*11]})})}}
     function draw(now:number){
-      if(!el.isConnected)return
+      if(!el?.isConnected)return
       if(!origin)origin=now;const t=(now-origin)/1000
       while(next*interval<=t){spawn(next);next++}
       while(events.length&&t-events[0].created>life)events.splice(0,per)
