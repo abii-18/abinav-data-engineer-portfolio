@@ -71,7 +71,7 @@ function SortingStudio() {
         previousCycle=currentCycle;next=0;events.length=0;last=-1
       }
       while(next<batches&&1+next*interval<=t){spawn(next);next++}
-      g.fillStyle='#0c0c0c';g.fillRect(0,0,1000,1260)
+      g.fillStyle='#0c0c0c';g.fillRect(0,0,1000,610)
       text('RAW FILES',114,420,17,'#eee',true);text(events.length+' / '+total+' FILES',114,442,12,'#999')
       for(let i=0;i<38;i++){
         const x=52+(i*67%278),y=78+(i*97%290),size=10+i%5
@@ -103,69 +103,37 @@ function SortingStudio() {
       g.strokeStyle='#aaa';g.lineWidth=1.8;g.setLineDash([5,6]);line(549,393,549,466);g.setLineDash([])
       text('DOWNSTREAM / BI',574,434,10,'#bbb',true)
       for(let i=0;i<6;i++){const y=399+((t*115+i*15)%65);g.fillStyle='#ddd';g.fillRect(547,y,4,7)}
-      const X=425,Y=482,W=518
-      // Five illustrative reporting batches follow the same curated-packet clock.
+      // Compact Query Pulse uses the curated-stage clock and resets with the run.
+      const X=42,Y=482,W=900,H=94
       const progress=clamp((t-(1+3*step+travel))/(runEnd-(1+3*step+travel)))
-      const targets=[1206722,1184331,1298441,1266504,1328190]
-      const fractions=targets.map((_,i)=>clamp(progress*5-i))
-      const records=targets.map((target,i)=>Math.floor(target*fractions[i]))
-      const ready=records.reduce((sum,n)=>sum+n,0),completed=fractions.filter(p=>p===1).length
-      const fmt=(n:number)=>Math.floor(n).toLocaleString('en-US')
-      const panel=(x:number,y:number,w:number,h:number,r=9)=>{
-        const gradient=g.createLinearGradient(x,y,x+w,y+h);gradient.addColorStop(0,'#1a1b1b');gradient.addColorStop(.5,'#101111');gradient.addColorStop(1,'#080909')
-        box(x,y,w,h,gradient,'#454747',r)
+      const ready=Math.floor(6284188*progress)
+      const gradient=g.createLinearGradient(X,Y,X+W,Y+H)
+      gradient.addColorStop(0,'#1b1d1d');gradient.addColorStop(.5,'#0a0b0b');gradient.addColorStop(1,'#151717')
+      box(X,Y,W,H,gradient,'#4b4e4e',12)
+      box(X+15,Y+15,60,64,'#222525','#555',9)
+      g.strokeStyle='#ddd';g.lineWidth=1.5
+      for(let row=0;row<3;row++){
+        g.beginPath();g.ellipse(X+45,Y+33+row*10,12,4,0,0,Math.PI);g.stroke()
       }
-      const arrow=(x:number,y:number)=>{g.strokeStyle='#bbb';g.lineWidth=1;line(x-4,y-4,x,y);line(x,y,x+4,y-4)}
-      panel(X,Y,W,744,14)
-      text('2 / SQL → INSIGHTS',X+22,Y+32,17,'#f2f2f2',true)
-      text('From curated data',X+348,Y+23,11,'#aaa');text('to clear insights',X+360,Y+39,11,'#aaa')
-      const innerX=X+14,innerY=Y+61
-      panel(innerX,innerY,490,661,10)
-      text('OPERATIONS ANALYTICS',X+32,Y+92,14,'#eee',true)
-      text(progress===1?'COMPLETE':'TRANSFORMING…',X+352,Y+91,9,'#bbb',true)
-      for(let i=0;i<3;i++){g.fillStyle=progress===1?'#aaa':Math.sin(t*4-i)>0?'#eee':'#555';g.beginPath();g.arc(X+467+i*7,Y+88,1.5,0,Math.PI*2);g.fill()}
-      const tableY=Y+114
-      panel(X+32,tableY,454,192,7)
-      text('batch',X+47,tableY+23,10,'#bbb');text('records',X+210,tableY+23,10,'#bbb');text('status',X+350,tableY+23,10,'#bbb')
-      for(let row=0;row<5;row++){
-        const y=tableY+47+row*28,fraction=fractions[row]
-        g.strokeStyle='#292b2b';line(X+46,y+9,X+473,y+9)
-        g.font='11px monospace';g.fillStyle='#bbb';g.fillText('2025-01-10-'+String(8+row).padStart(2,'0'),X+47,y)
-        g.fillStyle='#eee';g.fillText(fraction?fmt(records[row]):'—',X+210,y)
-        g.strokeStyle=fraction?'#ddd':'#777';g.lineWidth=1.2;g.beginPath();g.arc(X+349,y-4,5,0,Math.PI*2);g.stroke()
-        if(fraction===1){line(X+346,y-4,X+348,y-2);line(X+348,y-2,X+352,y-6)}
-        else if(fraction>0){g.beginPath();g.arc(X+349,y-4,7,t*4,t*4+Math.PI);g.stroke()}
-        text(fraction===1?'COMPLETED':fraction?'RUNNING':'PENDING',X+362,y,9,fraction?'#ddd':'#777')
-      }
-      const queryY=Y+339
-      g.strokeStyle='#bbb';g.setLineDash([3,4]);line(X+259,tableY+194,X+259,queryY-8);g.setLineDash([]);arrow(X+259,queryY-5)
-      panel(X+96,queryY,344,87,9)
-      text('SQL',X+108,queryY+24,10,'#aaa');g.font='11px monospace';g.fillStyle='#ddd'
-      g.fillText('SELECT batch, COUNT(*)',X+155,queryY+26);g.fillText('FROM curated',X+155,queryY+46);g.fillText('GROUP BY batch;',X+155,queryY+66)
-      const play=g.createLinearGradient(X+402,queryY+29,X+424,queryY+54);play.addColorStop(0,'#555');play.addColorStop(1,'#222')
-      g.fillStyle=play;g.beginPath();g.arc(X+414,queryY+43,12,0,Math.PI*2);g.fill();g.fillStyle='#eee';g.beginPath();g.moveTo(X+411,queryY+37);g.lineTo(X+420,queryY+43);g.lineTo(X+411,queryY+49);g.closePath();g.fill()
-      const cardY=Y+460,cards=[['TOTAL RECORDS',fmt(ready)],['AVG PER BATCH',fmt(ready/Math.max(1,Math.ceil(progress*5)))],['COMPLETION RATE',(completed/5*100).toFixed(1)+'%']]
-      cards.forEach(([label,value],i)=>{
-        const x=X+32+i*154
-        g.strokeStyle='#aaa';g.setLineDash([3,4]);line(X+259,queryY+87,X+259,cardY-16);line(X+109,cardY-16,X+417,cardY-16);line(x+73,cardY-16,x+73,cardY-4);g.setLineDash([]);arrow(x+73,cardY-2)
-        panel(x,cardY,146,92,8);text(label,x+11,cardY+21,9,'#bbb',true);text(value,x+11,cardY+49,20,'#f0f0f0',true)
-        if(i<2){for(let j=0;j<9;j++){
-          const h=(3+j*2.1)*clamp(progress*9-j)
-          const grad=g.createLinearGradient(0,cardY+80-h,0,cardY+80);grad.addColorStop(0,'#ddd');grad.addColorStop(1,'#444');g.fillStyle=grad;g.fillRect(x+12+j*14,cardY+80-h,7,h)
-        }}else{
-          g.strokeStyle='#ddd';g.beginPath();for(let j=0;j<20;j++){const px=x+12+j*6,py=cardY+80-(j*.6+Math.sin(j*.7)*2)*progress;if(j===0)g.moveTo(px,py);else g.lineTo(px,py)}g.stroke()
+      g.beginPath();g.ellipse(X+45,Y+33,12,4,0,0,Math.PI*2);g.stroke()
+      line(X+33,Y+33,X+33,Y+53);line(X+57,Y+33,X+57,Y+53)
+      g.fillStyle='#eee';g.font='16px monospace';g.fillText('SELECT COUNT(*)',X+98,Y+40)
+      g.fillStyle='#999';g.fillText('FROM curated',X+98,Y+64)
+      g.strokeStyle='#353838';g.lineWidth=1;line(X+295,Y+18,X+295,Y+76);line(X+650,Y+18,X+650,Y+76)
+      g.strokeStyle='#555';line(X+325,Y+47,X+620,Y+47)
+      g.strokeStyle='#ddd';line(X+325,Y+47,X+325+295*progress,Y+47)
+      g.fillStyle='#bbb';g.beginPath();g.moveTo(X+620,Y+43);g.lineTo(X+628,Y+47);g.lineTo(X+620,Y+51);g.closePath();g.fill()
+      if(progress>0&&progress<1){
+        for(let i=0;i<3;i++){
+          const phase=(t*.42+i/3)%1
+          g.save();g.shadowColor='#fff';g.shadowBlur=13;g.globalAlpha=Math.sin(phase*Math.PI)
+          g.fillStyle='#fff';g.beginPath();g.arc(X+325+phase*290,Y+47,3.5,0,Math.PI*2);g.fill();g.restore()
         }
-      })
-      const chartY=Y+565
-      panel(X+32,chartY,454,141,8);text('RECORDS PER BATCH',X+45,chartY+22,10,'#ccc',true)
-      for(let i=0;i<3;i++){const y=chartY+39+i*31;g.strokeStyle='#252727';line(X+78,y,X+473,y);text((2-i)+'.0M',X+44,y+3,9,'#888')}
-      for(let b=0;b<7;b++){
-        const x=X+89+b*54,base=chartY+101,target=b<5?targets[b]:1350000,height=target/2000000*62,fraction=b<5?fractions[b]:0
-        g.strokeStyle='#606363';g.setLineDash([3,3]);g.strokeRect(x,base-height,26,height);g.setLineDash([])
-        if(fraction){const h=height*fraction,grad=g.createLinearGradient(x,base-h,x,base);grad.addColorStop(0,'#e3e5e5');grad.addColorStop(.25,'#adb0b0');grad.addColorStop(1,'#505454');g.fillStyle=grad;g.fillRect(x,base-h,26,h)}
-        text(String(8+b).padStart(2,'0'),x+6,base+16,9,'#999')
       }
-      text('Batch (hour) →',X+222,chartY+133,9,'#888')
+      text((ready/1000000).toFixed(2)+'M',X+680,Y+47,30,'#f1f1f1',true)
+      text('records processed',X+680,Y+68,11,'#999')
+      box(X+807,Y+27,73,40,'#1b1d1d',progress===1?'#aaa':'#555',8)
+      text(Math.floor(progress*100)+'%',X+821,Y+53,18,'#eee')
       if(Math.floor(t*8)!==last){last=Math.floor(t*8);const values=[events.length,...counts];setStats(values);setBatch(next)}
       frame=requestAnimationFrame(draw)
     }
@@ -186,7 +154,7 @@ function SortingStudio() {
       })}
     </div>
     <div className="sorting-flow">RAW STREAM <i/> PROCESSING <i/> ANALYTICS READY</div>
-    <canvas ref={canvas} width={1000} height={1260} aria-label="Animated simulated pipeline from scattered raw files through ingestion, cleaning, validation, curation and a live SQL query, result metrics and records-per-batch chart"/>
+    <canvas ref={canvas} width={1000} height={610} aria-label="Animated simulated pipeline from scattered raw files through ingestion, cleaning, validation, curation and a compact animated SQL query pulse with record counter and completion progress"/>
     <div className="sorting-foot">ZERO → INGEST → CURATE → COMPLETE <span>BATCH {batch}</span></div>
     <p className="sorting-note">Illustrative simulation, not live production telemetry. SQL record volumes are illustrative; all batches animate from zero to completion.</p>
   </div>
