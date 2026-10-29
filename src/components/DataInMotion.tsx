@@ -43,7 +43,7 @@ function SortingStudio() {
   const canvas = useRef<HTMLCanvasElement>(null)
   const [stats,setStats]=useState([0,0,0,0,0])
   const [batch,setBatch]=useState(0)
-  const traces=useRef<number[][]>(Array.from({length:5},()=>Array(24).fill(0)))
+  
   useEffect(()=>{
     const el=canvas.current;if(!el)return
     const ctx=el.getContext('2d');if(!ctx)return
@@ -56,6 +56,12 @@ function SortingStudio() {
     const text=(s:string,x:number,y:number,size=11,color='#ddd',bold=false)=>{g.fillStyle=color;g.font=(bold?'bold ':'')+size+'px system-ui';g.fillText(s,x,y)}
     const line=(x:number,y:number,X:number,Y:number)=>{g.beginPath();g.moveTo(x,y);g.lineTo(X,Y);g.stroke()}
     const box=(x:number,y:number,w:number,h:number,fill='#191919',stroke='#444',r=7)=>{g.fillStyle=fill;g.strokeStyle=stroke;g.lineWidth=1;g.beginPath();g.roundRect(x,y,w,h,r);g.fill();g.stroke()}
+    function documentTile(size:number){
+      g.fillStyle='#777';g.strokeStyle='#bbb';g.lineWidth=.7
+      g.beginPath();g.moveTo(-size/2,-size*.65);g.lineTo(size*.18,-size*.65);g.lineTo(size/2,-size*.3);g.lineTo(size/2,size*.65);g.lineTo(-size/2,size*.65);g.closePath();g.fill();g.stroke()
+      g.beginPath();g.moveTo(size*.18,-size*.65);g.lineTo(size*.18,-size*.3);g.lineTo(size/2,-size*.3);g.stroke()
+      g.strokeStyle='#ddd';for(let row=0;row<3;row++)line(-size*.27,row*size*.21,size*.26,row*size*.21)
+    }
     function spawn(b:number){for(let i=0;i<per;i++){const id=b*per+i,a=id*2.39996,r=18+(id*37%140);events.push({id,created:1+b*interval,src:[195+Math.cos(a)*r,231+Math.sin(a)*r*.87],slots:folders.map((f,j)=>{const s=(id*13+j*19)%100;return[f.x+14+(s%13)*16.4,f.y+46+Math.floor(s/13)*11]})})}}
     function draw(now:number){
       if(!el?.isConnected)return
@@ -63,12 +69,15 @@ function SortingStudio() {
       const elapsed=(now-origin)/1000,currentCycle=Math.floor(elapsed/cycle),t=elapsed%cycle
       if(currentCycle!==previousCycle){
         previousCycle=currentCycle;next=0;events.length=0;last=-1
-        traces.current=Array.from({length:5},()=>Array(24).fill(0))
       }
       while(next<batches&&1+next*interval<=t){spawn(next);next++}
       g.fillStyle='#0c0c0c';g.fillRect(0,0,1000,840)
-      text('UNSTRUCTURED EVENTS',98,32,15,'#eee',true);text('INCOMING RAW STREAM',98,49,10,'#999')
-      g.strokeStyle='#303030';g.beginPath();g.ellipse(195,231,171,156,0,0,Math.PI*2);g.stroke()
+      text('RAW FILES',114,420,17,'#eee',true);text(events.length+' / '+total+' FILES',114,442,12,'#999')
+      for(let i=0;i<38;i++){
+        const x=52+(i*67%278),y=78+(i*97%290),size=10+i%5
+        g.save();g.translate(x,y+Math.sin(t*.7+i)*3);g.globalAlpha=.35+(i%4)*.13
+        documentTile(size);g.restore()
+      }
       const counts=[0,0,0,0],inside=[0,0,0,0];let moving=0
       const active:{e:Tile,stage:number,done:boolean,x:number,y:number,p:number}[]=[]
       for(const e of events){
@@ -87,9 +96,9 @@ function SortingStudio() {
       folders.forEach((f,j)=>{box(f.x,f.y,f.w,f.h,'#191919',inside[j]?'#bbb':'#555',9);g.fillStyle='#444';g.fillRect(f.x+9,f.y-6,70,7);text(f.n,f.x+12,f.y+18,12,'#eee',true);text(f.s,f.x+12,f.y+33,9,'#aaa');g.strokeStyle='#383838';line(f.x+10,f.y+39,f.x+f.w-10,f.y+39);text(inside[j]+' EVENTS IN STAGE',f.x+12,f.y+f.h-9,9,'#888')})
       g.strokeStyle='#777';g.setLineDash([5,7]);line(372,127,422,127);line(671,127,692,127);line(820,194,820,244);line(695,322,674,322);g.setLineDash([])
       for(const {e,stage,done,x,y,p} of active){if(stage===4)continue
-        const size=done?9:8+(e.id%5),tone=['#fff','#bbb','#777','#ddd','#666'][e.id%5]
+        const size=done?9:8+(e.id%5)
         g.save();g.translate(x,y);g.rotate(done?0:Math.sin(e.id*.713)*Math.sin(p*Math.PI)*.5);g.globalAlpha=.75
-        g.fillStyle='#111';g.strokeStyle=tone;g.lineWidth=.8;g.fillRect(-size/2,-size*.36,size,size*.72);g.strokeRect(-size/2,-size*.36,size,size*.72);g.fillStyle=tone;g.fillRect(-size*.3,-size*.2,size*.37,size*.35);g.restore()
+        documentTile(size);g.restore()
       }
       g.strokeStyle='#aaa';g.lineWidth=1.8;g.setLineDash([5,6]);line(549,393,549,466);g.setLineDash([])
       text('DOWNSTREAM / BI',574,434,10,'#bbb',true)
@@ -106,7 +115,7 @@ function SortingStudio() {
       g.lineWidth=11;g.strokeStyle='#444';g.beginPath();g.arc(px+59,py+77,30,0,Math.PI*2);g.stroke();g.strokeStyle='#ddd';g.beginPath();g.arc(px+59,py+77,30,-Math.PI/2,-Math.PI/2+Math.PI*2*.986*intensity);g.stroke();text((intensity*98.6).toFixed(1)+'%',px+45,py+81,13,'#eee',true);text('VALID',px+107,py+68,10,'#ddd');text('REVIEW',px+107,py+88,10,'#999');text('RETRY',px+107,py+108,10,'#777')
       text('PROCESSING THROUGHPUT',X+16,Y+284,10,'#bbb',true);g.strokeStyle='#ddd';g.lineWidth=1.7;g.beginPath();for(let i=0;i<25;i++){const x=X+16+i*11.5,y=Y+312-(.15+i*.03)*28*intensity;if(!i)g.moveTo(x,y);else g.lineTo(x,y)}g.stroke()
       text('RECENT ACTIVITY',X+318,Y+284,10,'#bbb',true);text('Curated batches '+Math.floor(ready/per)+' / '+batches,X+318,Y+299,9,'#ddd');text(ready===total?'Run complete':ready?'Processing curated events':'Waiting for curated events',X+318,Y+312,9,'#999')
-      if(Math.floor(t*8)!==last){last=Math.floor(t*8);const values=[events.length,...counts];setStats(values);setBatch(next);values.forEach((v,i)=>{traces.current[i].push(v);traces.current[i].shift()})}
+      if(Math.floor(t*8)!==last){last=Math.floor(t*8);const values=[events.length,...counts];setStats(values);setBatch(next)}
       frame=requestAnimationFrame(draw)
     }
     frame=requestAnimationFrame(draw)
@@ -114,14 +123,19 @@ function SortingStudio() {
   },[])
   return <div className="sorting-studio">
     <div className="sorting-live"><span className="sorting-pulse"/>LIVE SIMULATION <small>0.55s / BATCH</small></div>
-    <div className="sorting-metrics">{['TOTAL EVENTS','INGESTED','CLEANED','VALIDATED','CURATED'].map((label,i)=>{
-      const values=traces.current[i],min=0,range=504
-      return <div className="sorting-metric" key={label}><span>{label}</span><strong>{stats[i].toLocaleString('en-US')}</strong>
-        <svg viewBox="0 0 100 28" preserveAspectRatio="none" aria-hidden="true"><polyline fill="none" stroke="#ddd" strokeWidth="1.5" points={values.map((v,j)=>`${j*99/(values.length-1)},${24-(v-min)/range*19}`).join(' ')}/></svg>
-        <div className="sorting-track"><i style={{width:(stats[i]/504*100)+'%'}}/></div><small>{['RAW INPUT','S3 LANDING','TRANSFORM','QUALITY','BI READY'][i]}</small></div>
-    })}</div>
+    <div className="pipeline-journey" aria-label="Pipeline progress">
+      {['RAW','INGEST','CLEAN','VALIDATE','CURATE'].map((label,i)=>{
+        const complete=stats[i]===504,active=stats[i]>0&&!complete
+        const icons=[<><ellipse cx="24" cy="12" rx="12" ry="5"/><path d="M12 12v23c0 7 24 7 24 0V12M12 23c0 7 24 7 24 0M12 30c0 7 24 7 24 0"/></>,<path d="M13 34h23a8 8 0 0 0 0-16 12 12 0 0 0-23-3 10 10 0 0 0 0 19Z"/>,<><path d="m20 8 8 0 2 7 7 2 3 7-5 5-1 8-8 3-6-5-8-1-3-8 5-6 1-8Z"/><circle cx="24" cy="24" r="6"/></>,<><path d="M24 6 39 12v12c0 10-15 18-15 18S9 34 9 24V12Z"/><path d="m17 24 5 5 10-11"/></>,<path d="M10 39V24m10 15V15m10 24V8m10 31V20"/>]
+        return <div className="pipeline-step" key={label} data-state={complete?'complete':active?'active':'waiting'}>
+          <div className="pipeline-node"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">{icons[i]}</svg><span>{label}</span></div>
+          {i<4&&<div className="pipeline-connection" data-running={stats[i]>stats[i+1]} aria-hidden="true"><i/><i/><i/><b>›</b></div>}
+          <strong>{stats[i].toLocaleString('en-US')}</strong><small>{['files detected','ingested','cleaned','validated','curated'][i]}</small>
+        </div>
+      })}
+    </div>
     <div className="sorting-flow">RAW STREAM <i/> PROCESSING <i/> ANALYTICS READY</div>
-    <canvas ref={canvas} width={1000} height={840} aria-label="Animated simulated pipeline from unstructured events through ingestion, cleaning, validation, curation and a downstream BI dashboard"/>
+    <canvas ref={canvas} width={1000} height={840} aria-label="Animated simulated pipeline from scattered raw files through ingestion, cleaning, validation, curation and a downstream BI dashboard"/>
     <div className="sorting-foot">ZERO → INGEST → CURATE → COMPLETE <span>BATCH {batch}</span></div>
     <p className="sorting-note">Illustrative simulation, not live production telemetry. Dashboard SLA and quality figures are illustrative.</p>
   </div>
