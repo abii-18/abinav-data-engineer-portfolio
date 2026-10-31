@@ -1,0 +1,1 @@
+.crickx-stages{grid-template-columns:repeat(4,1fr)}.crickx-stages .architecture-step i{right:-13px;color:#73d6c1}@media(max-width:700px){.crickx-stages{grid-template-columns:repeat(2,1fr)}.crickx-stages .architecture-step i{display:none}}

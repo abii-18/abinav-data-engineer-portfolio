@@ -20,3 +20,20 @@ export function Architecture() {
     </button>)}</div>
   </div>
 }
+
+const crickXSteps = [
+  ['Source systems', 'Source events and operational data enter the streaming pipeline.'],
+  ['Apache Kafka', 'Kafka provides durable event streaming between producers and downstream processing.'],
+  ['PySpark', 'Distributed processing transforms and prepares streaming data for persistence.'],
+  ['PostgreSQL', 'Processed records are stored for application and analytical access.'],
+]
+
+export function CrickXArchitecture() {
+  const [active, setActive] = useState(0)
+  return <div className="architecture" aria-label="CrickX system architecture">
+    <div className="architecture-explainer" aria-live="polite"><span>Stage 0{active + 1}</span><p>{crickXSteps[active][1]}</p></div>
+    <div className="architecture-stages crickx-stages">{crickXSteps.map(([step], i) => <button className={`architecture-step ${active === i ? 'active' : ''}`} onMouseEnter={() => setActive(i)} onFocus={() => setActive(i)} onClick={() => setActive(i)} key={step}>
+      <span className="step-number">0{i + 1}</span><strong>{step}</strong>{i < crickXSteps.length - 1 && <i aria-hidden="true">→</i>}
+    </button>)}</div>
+  </div>
+}
