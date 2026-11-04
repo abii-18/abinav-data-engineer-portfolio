@@ -1,0 +1,6 @@
+[
+  {"title":"Languages & Databases","tools":[{"name":"Python","logo":"python"},{"name":"SQL"},{"name":"PostgreSQL","logo":"postgresql"},{"name":"Amazon Redshift","logo":"aws-redshift"},{"name":"Snowflake","logo":"snowflake-icon"}]},
+  {"title":"Data Engineering & Frameworks","tools":[{"name":"Apache Airflow","logo":"airflow-icon"},{"name":"PySpark","logo":"apache-spark"},{"name":"AWS Glue","logo":"aws-glue"},{"name":"dbt","logo":"dbt-icon"},{"name":"Pandas","logo":"pandas-icon"},{"name":"NumPy","logo":"numpy"},{"name":"Apache Kafka","logo":"kafka-icon"},{"name":"FastAPI","logo":"fastapi-icon"}]},
+  {"title":"Cloud & DevOps","tools":[{"name":"AWS","logo":"aws"},{"name":"Amazon S3","logo":"aws-s3"},{"name":"AWS Lambda","logo":"aws-lambda"},{"name":"AWS IAM","logo":"aws-iam"},{"name":"Amazon CloudWatch","logo":"aws-cloudwatch"},{"name":"Amazon SNS","logo":"aws-sns"},{"name":"Docker","logo":"docker-icon"},{"name":"Git","logo":"git"},{"name":"GitHub","logo":"github-icon"}]},
+  {"title":"Data Platforms & Tools","tools":[{"name":"Databricks","logo":"databricks"},{"name":"Amazon MWAA","logo":"aws-mwaa"},{"name":"Amazon Athena","logo":"aws-athena"},{"name":"Postman","logo":"postman-icon"},{"name":"Linux","logo":"linux-tux"},{"name":"Bash","logo":"bash-icon"}]}
+]
