@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Mono:wght@400&display=swap');
+.featured-projects{padding:4px 0 76px;font-family:Inter,Manrope,Arial,sans-serif;scroll-margin-top:96px}
+.featured-projects-heading{text-align:center;margin-bottom:38px}
+.featured-projects-heading>p{font:11px 'DM Mono',monospace;letter-spacing:.15em;color:#9c95eb;margin:0 0 14px}
+.featured-projects-heading>h2{color:var(--ink);font-size:clamp(30px,5vw,42px);font-weight:600;letter-spacing:-.04em;line-height:1.2;margin:0 0 12px}
+.featured-projects-heading>span{font-size:15px;color:#8291a7;line-height:1.6}
+.featured-projects-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.featured-project-card{min-width:0;display:flex;flex-direction:column;padding:24px;border:1px solid #25252f;background:#111118;border-radius:13px;transition:border-color .2s,box-shadow .2s}
+.featured-project-card:hover{border-color:#9c95eb65;box-shadow:0 8px 24px #0002}
+.featured-project-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
+.featured-project-top>h3{font-size:21px;line-height:1.4;letter-spacing:-.035em;font-weight:650;color:#e6e9e9;margin:0}
+.featured-project-category{font-size:10px;line-height:1.5;border:1px solid #9c95eb35;background:#9c95eb10;color:#b6a7ec;border-radius:999px;padding:4px 9px;white-space:nowrap}
+.featured-project-subtitle{font:12px 'DM Mono',monospace;line-height:1.7;color:#b39af5;margin:8px 0 20px}
+.featured-project-description{font-size:14px;line-height:1.8;color:#8291a7;margin:0 0 22px}
+.featured-project-card ul{list-style:none;padding:0;margin:0 0 22px;display:grid;gap:9px}
+.featured-project-card li{font-size:12px;line-height:1.8;color:#a0aec0;padding-left:15px;position:relative}
+.featured-project-card li::before{content:'▸';position:absolute;left:0;top:1px;color:#9c95eb;font-size:10px}
+.featured-project-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:0}
+.featured-project-tags>span{font:10px 'DM Mono',monospace;line-height:1.5;color:#8796ab;border:1px solid #2d2d38;border-radius:999px;background:#1a1a23;padding:4px 8px}
+.featured-project-card>.featured-project-links{display:flex;align-items:center;flex-wrap:wrap;gap:17px;max-width:none;width:100%;border-top:1px solid #292933;padding:13px 0 0;margin:20px 0 0;font-size:12px}
+.featured-project-links a{display:inline-flex;align-items:center;gap:6px;color:#94a3b8;line-height:1.8}
+.featured-project-links a:last-child{color:#9c95eb}
+.featured-project-links a:hover{color:#e6e9e9}
+/* The legacy global footer rule must not hide project-card links. */
+.featured-project-card>footer.featured-project-links{display:flex}
+@media(max-width:680px){.featured-projects-grid{grid-template-columns:1fr;gap:18px}.featured-projects{padding-bottom:56px}.featured-project-card{padding:23px}.featured-projects-heading{margin-bottom:28px}}
+@media(prefers-reduced-motion:reduce){.featured-project-card{transition:none}}
+
+.featured-project-links a:first-child{font-family:Inter,Manrope,Arial,sans-serif;font-size:14px;font-weight:500;color:#758399;gap:7px}.featured-project-links a:first-child svg{width:17px;height:17px;fill:currentColor;stroke-width:0}
+
+.featured-project-tags{gap:10px;align-items:center}.featured-project-tags>span{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;padding:5px;border:0;border-radius:0;background:transparent}.featured-project-tags img{width:22px;height:22px;display:block;object-fit:contain}.featured-project-tags .featured-tech-wordmark{font:500 9px Inter,Arial,sans-serif;color:#9c95eb}.featured-project-tags>span:has(.featured-tech-wordmark){width:auto;min-width:32px}
+
+.featured-project-category{color:#4ade80;background:#14532d26;border-color:#22c55e40}
+
+/* Match the reference's paragraph and highlight hierarchy. */
+.featured-project-description{font-family:Inter,Manrope,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.75;letter-spacing:-.01em;color:#8291a7;margin:0 0 22px}
+.featured-project-card ul{gap:8px;margin:0 0 22px}
+.featured-project-card li{font-family:Inter,Manrope,Arial,sans-serif;font-size:14px;font-weight:400;line-height:1.7;letter-spacing:-.01em;color:#94a3b8;padding-left:18px}
+.featured-project-card li::before{font-size:10px;top:3px;color:#9c95eb}
+@media(max-width:680px){.featured-project-description{font-size:15px;line-height:1.8}.featured-project-card li{font-size:13px;line-height:1.75}}
