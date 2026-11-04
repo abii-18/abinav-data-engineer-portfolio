@@ -30,3 +30,5 @@ html{scroll-behavior:smooth;scroll-padding-top:88px}
 .closing-connect-links a:focus-visible{outline:2px solid #9c95eb;outline-offset:4px}
 @media(max-width:620px){.closing-connect{grid-template-columns:1fr;gap:24px}.closing-connect-links{flex-direction:row;border-left:0;border-top:1px solid var(--line);padding:16px 0 0;gap:18px}}
 @media(prefers-reduced-motion:reduce){.closing-connect-links a{transition:none}}
+
+.closing-brand-icon{display:block;width:23px;height:23px;background:currentColor;mask:var(--brand-logo) center/contain no-repeat;-webkit-mask:var(--brand-logo) center/contain no-repeat}.closing-github{--brand-logo:url("/logos/github-icon.svg")}.closing-linkedin{--brand-logo:url("/logos/linkedin.svg")}
