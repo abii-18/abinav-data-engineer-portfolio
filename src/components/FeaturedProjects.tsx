@@ -1,3 +1,4 @@
+import { MotionText } from './MotionText'
 import { ArrowUpRight } from 'lucide-react'
 import './FeaturedProjects.css'
 
@@ -22,7 +23,7 @@ const projects = [
 
 export function FeaturedProjects() {
   return <section className="featured-projects" aria-labelledby="featured-projects-title">
-    <header className="featured-projects-heading"><p>PROJECTS</p><h2 id="featured-projects-title">Featured Projects</h2><span>Data systems I’ve designed and built</span></header>
+    <header className="featured-projects-heading"><p>PROJECTS</p><h2 id="featured-projects-title"><MotionText text="Featured Projects" /></h2><span>Data systems I’ve designed and built</span></header>
     <div className="featured-projects-grid">{projects.map(project => <article className="featured-project-card" key={project.name}>
       <div className="featured-project-top"><h3>{project.name}</h3><span className="featured-project-category">{project.category}</span></div>
       <p className="featured-project-subtitle">{project.subtitle}</p>

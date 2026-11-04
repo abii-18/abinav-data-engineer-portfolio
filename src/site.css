@@ -8,3 +8,13 @@ html{scroll-behavior:smooth;scroll-padding-top:88px}
 [data-scroll-reveal="pending"]{opacity:0;transform:translateY(20px)}
 [data-scroll-reveal="visible"]{opacity:1;transform:none;animation:section-scroll-enter .8s cubic-bezier(.22,1,.36,1) both}[data-scroll-reveal="instant"]{opacity:1;transform:none}@keyframes section-scroll-enter{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}[data-scroll-reveal]{opacity:1;transform:none;transition:none;animation:none}}
+
+/* Shared wide layout across every page and section. */
+.journal-main,.journal-nav nav,.journal-footer{width:min(1200px,calc(100% - 64px))}
+.little-more,.page-intro{max-width:none}
+.journal-hero{box-sizing:border-box}
+.journal-main>.journal-hero{width:calc(100vw - 17px);margin-left:calc((100% - (100vw - 17px))/2);padding-left:max(32px,calc((100vw - 1200px)/2));padding-right:max(32px,calc((100vw - 1200px)/2))}
+.journal-hero h1{font-size:clamp(64px,7.5vw,112px)}
+.journal-hero h2{font-size:clamp(18px,2vw,26px)}
+.journal-hero .achievement-marquee{max-width:100%;box-sizing:border-box}
+@media(max-width:620px){.journal-main,.journal-nav nav,.journal-footer{width:calc(100% - 36px)}.journal-main>.journal-hero{padding-left:18px;padding-right:18px}.journal-hero h1{font-size:clamp(52px,12vw,72px)}}

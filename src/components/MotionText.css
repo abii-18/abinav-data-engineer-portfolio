@@ -1,0 +1,6 @@
+.motion-text{display:inline}
+.motion-word{display:inline-block;transform-origin:50% 80%}
+.motion-text[data-text-reveal=pending] .motion-word{opacity:0;transform:translateY(16px) scale(.94)}
+.motion-text[data-text-reveal=visible] .motion-word{animation:portfolio-word-enter .7s cubic-bezier(.22,1,.36,1) both}
+@keyframes portfolio-word-enter{from{opacity:0;transform:translateY(16px) scale(.94)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(prefers-reduced-motion:reduce){.motion-text .motion-word{animation:none!important;opacity:1!important;transform:none!important}}
