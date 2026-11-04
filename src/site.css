@@ -6,5 +6,5 @@
 html{scroll-behavior:smooth;scroll-padding-top:88px}
 [data-scroll-reveal]{transition:opacity .65s ease,transform .65s cubic-bezier(.22,1,.36,1)}
 [data-scroll-reveal="pending"]{opacity:0;transform:translateY(20px)}
-[data-scroll-reveal="visible"]{opacity:1;transform:none}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}[data-scroll-reveal]{opacity:1;transform:none;transition:none}}
+[data-scroll-reveal="visible"]{opacity:1;transform:none;animation:section-scroll-enter .8s cubic-bezier(.22,1,.36,1) both}[data-scroll-reveal="instant"]{opacity:1;transform:none}@keyframes section-scroll-enter{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}[data-scroll-reveal]{opacity:1;transform:none;transition:none;animation:none}}

@@ -1,6 +1,6 @@
 import { useLayoutEffect } from 'react'
 
-/** Reveal each section once, without hiding the initial viewport or changing layout. */
+/** Reveal sections and individual experience cards once as they enter the viewport. */
 export function useScrollReveal(path: string) {
   useLayoutEffect(() => {
     const main = document.querySelector<HTMLElement>('.journal-main')
@@ -10,8 +10,8 @@ export function useScrollReveal(path: string) {
     if (preference.matches) return
 
     const sections = Array.from(main.querySelectorAll<HTMLElement>(
-      ':scope > section, :scope > header, :scope > .data-motion-group > section, :scope > .project-listings > a',
-    ))
+      ':scope > section, :scope > header, :scope > .data-motion-group > section, :scope > .project-listings > a, .experience-section-heading, .experience-timeline-item',
+    )).filter(section => !section.querySelector('.experience-timeline'))
     const reveal = (section: HTMLElement) => {
       section.dataset.scrollReveal = 'visible'
       observer.unobserve(section)
@@ -20,12 +20,11 @@ export function useScrollReveal(path: string) {
       entries.forEach(entry => {
         if (entry.isIntersecting) reveal(entry.target as HTMLElement)
       })
-    }, { threshold: 0.01, rootMargin: '0px 0px -24px 0px' })
+    }, { threshold: 0.01, rootMargin: '0px 0px -72px 0px' })
 
     sections.forEach(section => {
       const bounds = section.getBoundingClientRect()
-      // Above-the-fold content and restored scroll positions remain immediately readable.
-      if (bounds.top < window.innerHeight && bounds.bottom > 0) return
+      // Keep content above a restored scroll position readable; animate the initial viewport too.
       if (bounds.bottom <= 0) return
       section.dataset.scrollReveal = 'pending'
       observer.observe(section)
@@ -34,7 +33,10 @@ export function useScrollReveal(path: string) {
     const showFocusedSection = (event: FocusEvent) => {
       if (!(event.target instanceof Element)) return
       const section = event.target.closest<HTMLElement>('[data-scroll-reveal="pending"]')
-      if (section) reveal(section)
+      if (section) {
+        section.dataset.scrollReveal = 'instant'
+        observer.unobserve(section)
+      }
     }
     const showAll = () => {
       if (!preference.matches) return
