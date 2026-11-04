@@ -229,6 +229,9 @@ export function DataInMotion() {
     
     <AchievementMarquee />
     </section>
-    <section className="data-motion motion-section motion-what-i-do" aria-label="What I do"><div className="motion-section-label">01 / WHAT I DO</div><SortingStudio /><p className="motion-description">I work across Python, SQL, Airflow and AWS to develop resilient ETL workflows, enforce data quality, improve performance and maintain production reliability.</p></section>
   </div>
+}
+
+export function WhatIDo() {
+  return <section className="data-motion motion-section motion-what-i-do" aria-label="What I do"><div className="motion-section-label">01 / WHAT I DO</div><SortingStudio /><p className="motion-description">I work across Python, SQL, Airflow and AWS to develop resilient ETL workflows, enforce data quality, improve performance and maintain production reliability.</p></section>
 }
