@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+.experience-section-heading{text-align:center;margin-bottom:32px}
+.experience-section-heading>p{font:11px 'DM Mono',monospace;letter-spacing:.12em;color:#9c95eb;margin:0 0 14px}
+.experience-section-heading>h2{font-size:clamp(30px,5vw,42px);font-weight:600;letter-spacing:-.045em;margin:0;color:var(--ink)}
+.experience-timeline{--experience-accent:#9c95eb;display:grid;gap:26px;position:relative;padding-left:32px;margin:0 0 32px}
+.experience-timeline::before{content:'';position:absolute;top:12px;bottom:24px;left:7px;width:1px;background:linear-gradient(var(--experience-accent),color-mix(in srgb,var(--experience-accent) 12%,transparent))}
+.experience-timeline-item{position:relative;min-width:0}
+.experience-timeline-marker{position:absolute;left:-31px;top:29px;width:13px;height:13px;border:3px solid var(--bg);border-radius:50%;background:var(--experience-accent);box-shadow:0 0 0 1px color-mix(in srgb,var(--experience-accent) 55%,transparent),0 0 14px #9c95eb20}
+.experience-timeline-card{padding:27px;border:1px solid var(--line);border-radius:13px;background:color-mix(in srgb,var(--bg) 96%,var(--ink) 4%);transition:border-color .2s,box-shadow .2s}
+.experience-timeline-card:hover{border-color:color-mix(in srgb,var(--experience-accent) 45%,var(--line));box-shadow:0 8px 28px #00000015}
+.experience-timeline-top{display:flex;justify-content:space-between;gap:20px;align-items:flex-start}
+.experience-timeline-top h3{color:var(--ink);font-size:17px;font-weight:600;line-height:1.45;letter-spacing:-.02em;margin:0 0 5px}
+.experience-timeline-company{color:var(--experience-accent);font-size:13px;margin:0;line-height:1.6}
+.experience-timeline-meta{display:flex;align-items:flex-end;flex-direction:column;gap:9px;flex-shrink:0}
+.experience-timeline-status{display:inline-block;font-size:10px;line-height:1.5;border:1px solid var(--line);background:color-mix(in srgb,var(--ink) 4%,transparent);color:var(--muted);border-radius:999px;padding:3px 10px}
+.experience-timeline-status.current{color:#78c4a3;background:#1d8c6314;border-color:#3ca57e30}
+.experience-timeline-meta time{font:10px 'DM Mono',monospace;color:var(--muted);white-space:nowrap;line-height:1.6}
+.experience-timeline-type{font:10px 'DM Mono',monospace;color:var(--muted);margin:17px 0 20px;line-height:1.7}
+.experience-timeline-card ul{list-style:none;display:grid;gap:12px;margin:0 0 22px;padding:0}
+.experience-timeline-card li{position:relative;padding-left:16px;font-size:12px;line-height:1.85;color:var(--muted)}
+.experience-timeline-card li::before{content:'▸';position:absolute;left:0;top:0;color:var(--experience-accent)}
+.experience-timeline-skills{display:flex;gap:6px;flex-wrap:wrap}
+.experience-timeline-skills>span{font:10px 'DM Mono',monospace;color:var(--muted);border:1px solid var(--line);background:color-mix(in srgb,var(--ink) 3%,transparent);border-radius:999px;padding:5px 9px;line-height:1.4}
+.experience-timeline-ownership{border-left:2px solid var(--experience-accent);padding:3px 0 3px 14px;margin:4px 0 22px}
+.experience-timeline-ownership strong{font-size:12px;font-weight:500;color:var(--ink)}
+.experience-timeline-ownership p{color:var(--muted);font-size:12px;line-height:1.8;margin:7px 0 0}
+@media(max-width:620px){.experience-timeline{padding-left:24px;gap:20px}.experience-timeline::before{left:5px}.experience-timeline-marker{left:-24px;width:12px;height:12px;top:24px}.experience-timeline-card{padding:20px 17px}.experience-timeline-top{flex-direction:column;gap:12px}.experience-timeline-meta{align-items:center;flex-direction:row;gap:12px;flex-wrap:wrap}.experience-timeline-top h3{font-size:16px}.experience-timeline-card li{font-size:12px}.experience-section-heading{margin-bottom:26px}}
+@media(prefers-reduced-motion:reduce){.experience-timeline-card{transition:none}}
+
+.experience-timeline-skills>.experience-tool-icon{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;padding:8px;border-radius:50%;color:var(--experience-accent)}
+
+.experience-timeline-skills>.experience-tool-icon{width:50px;height:42px;border-radius:9px;background:#e9ecef;padding:7px;border-color:#c1c6ce}.experience-tool-icon img{display:block;width:100%;height:100%;object-fit:contain}.experience-tool-icon .sql-wordmark{font:600 11px Manrope,Arial;color:#323e50}
+
+/* Small, unframed technology logos. */
+.experience-timeline-skills>.experience-tool-icon{width:32px;height:32px;padding:5px;border:0;border-radius:0;background:transparent}.experience-tool-icon img{width:22px;height:22px}.experience-tool-icon .sql-wordmark{color:var(--experience-accent);font-size:10px}
+
+.experience-section-heading>p{font-family:Inter,Manrope,Arial,sans-serif;font-weight:500;letter-spacing:.14em}.experience-section-heading>h2{font-family:Inter,Manrope,Arial,sans-serif;font-weight:500;letter-spacing:-.035em}
+
+.experience-timeline-type,.experience-timeline-card li,.experience-timeline-ownership p{font-family:Inter,Manrope,Arial,sans-serif;font-weight:400}
+
+/* Reference-matched card typography and spacing. */
+.experience-timeline-card{padding:24px;border-color:#25252f;background:#111118;border-radius:12px;font-family:Inter,Manrope,Arial,sans-serif}
+.experience-timeline-top{gap:24px}
+.experience-timeline-top h3{font-family:Inter,Manrope,Arial,sans-serif;font-size:22px;font-weight:700;line-height:1.35;letter-spacing:-.035em;margin:0 0 4px}
+.experience-timeline-company{font-family:Inter,Manrope,Arial,sans-serif;font-size:16px;font-weight:500;line-height:1.5;color:#8177ff;margin:0}
+.experience-timeline-meta{gap:10px}
+.experience-timeline-status{font-family:Inter,Manrope,Arial,sans-serif;font-size:12px;font-weight:500;line-height:1.5;padding:4px 12px}
+.experience-timeline-status.current{color:#22c55e;background:#0b2a1a;border-color:#14532d}
+.experience-timeline-meta time{font:12px 'DM Mono',monospace;line-height:1.5;letter-spacing:.025em;color:#758399}
+.experience-timeline-type{font:12px 'DM Mono',monospace;line-height:1.7;letter-spacing:.03em;color:#758399;margin:14px 0 20px}
+.experience-timeline-card ul{gap:12px;margin:0 0 22px}
+.experience-timeline-card li{font-family:Inter,Manrope,Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.7;letter-spacing:-.015em;color:#94a3b8;padding-left:22px}
+.experience-timeline-card li::before{font-size:11px;top:4px;color:#8177ff}
+.experience-timeline-skills{gap:10px}
+@media(max-width:620px){.experience-timeline-card{padding:20px}.experience-timeline-top{gap:12px}.experience-timeline-top h3{font-size:19px}.experience-timeline-company{font-size:15px}.experience-timeline-card li{font-size:14px;line-height:1.75;padding-left:19px}.experience-timeline-meta time{font-size:11px}}
