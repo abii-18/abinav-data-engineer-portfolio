@@ -1,39 +1,27 @@
-import { useState } from 'react'
+import './Architecture.css'
 
-const steps = [
-  ['Source systems', 'Transactional and reference datasets entering from PostgreSQL and APIs.'],
-  ['PostgreSQL / APIs', 'Source systems providing transactional and reference datasets.'],
-  ['Apache Airflow', 'Dependency-driven orchestration with scheduling, retries, branching, and runtime parameters.'],
-  ['Raw zone', 'Landing layer preserving incoming data before transformation.'],
-  ['Bronze', 'Parallel ingestion layer for raw structured datasets.'],
-  ['Silver', 'PySpark transformation layer for schema enforcement, deduplication, enrichment, standardization, and reject handling.'],
-  ['Snowflake', 'Warehouse ingestion using stages, COPY INTO, and staging tables.'],
-  ['dbt', 'Staging, dimensional, fact, and analytical models with automated tests.'],
-  ['Analytics', 'Curated datasets prepared for downstream reporting and analysis.'],
-]
-export function Architecture() {
-  const [active, setActive] = useState(0)
-  return <div className="architecture" aria-label="Retail Sales Lakehouse data architecture">
-    <div className="architecture-explainer" aria-live="polite"><span>Stage 0{active + 1}</span><p>{steps[active][1]}</p></div>
-    <div className="architecture-stages">{steps.map(([step], i) => <button className={`architecture-step ${active === i ? 'active' : ''}`} onMouseEnter={() => setActive(i)} onFocus={() => setActive(i)} onClick={() => setActive(i)} key={step}>
-      <span className="step-number">0{i + 1}</span><strong>{step}</strong>{i < steps.length - 1 && <i aria-hidden="true">↓</i>}
-    </button>)}</div>
-  </div>
+const diagrams = {
+  retail: {
+    title: 'Retail Sales Lakehouse',
+    image: '/architecture/retail-lakehouse.gif',
+    description: 'PostgreSQL and Currency API → Airflow → S3 Raw → six Bronze Glue jobs → Silver Glue → S3 Parquet → Snowflake → dbt models, Gold analytics and tests.',
+  },
+  crickx: {
+    title: 'CrickX',
+    image: '/architecture/crickx.gif',
+    description: 'Python delivery events flow through Kafka and PySpark Structured Streaming into PostgreSQL and Streamlit, with a separate monitoring path for Prometheus and Grafana.',
+  },
 }
 
-const crickXSteps = [
-  ['Source systems', 'Source events and operational data enter the streaming pipeline.'],
-  ['Apache Kafka', 'Kafka provides durable event streaming between producers and downstream processing.'],
-  ['PySpark', 'Distributed processing transforms and prepares streaming data for persistence.'],
-  ['PostgreSQL', 'Processed records are stored for application and analytical access.'],
-]
-
-export function CrickXArchitecture() {
-  const [active, setActive] = useState(0)
-  return <div className="architecture" aria-label="CrickX system architecture">
-    <div className="architecture-explainer" aria-live="polite"><span>Stage 0{active + 1}</span><p>{crickXSteps[active][1]}</p></div>
-    <div className="architecture-stages crickx-stages">{crickXSteps.map(([step], i) => <button className={`architecture-step ${active === i ? 'active' : ''}`} onMouseEnter={() => setActive(i)} onFocus={() => setActive(i)} onClick={() => setActive(i)} key={step}>
-      <span className="step-number">0{i + 1}</span><strong>{step}</strong>{i < crickXSteps.length - 1 && <i aria-hidden="true">→</i>}
-    </button>)}</div>
-  </div>
+function ArchitectureDiagram({ project }: { project: keyof typeof diagrams }) {
+  const diagram = diagrams[project]
+  return <figure className="project-architecture-diagram">
+    <a href={diagram.image} target="_blank" rel="noopener noreferrer" aria-label={`Open ${diagram.title} architecture diagram at full size`}>
+      <img src={diagram.image} alt={`${diagram.title} animated architecture: ${diagram.description}`} loading="lazy" decoding="async" />
+    </a>
+    <figcaption><span>{diagram.description}</span><a href={diagram.image} target="_blank" rel="noopener noreferrer">View full-size diagram ↗</a></figcaption>
+  </figure>
 }
+
+export function Architecture() { return <ArchitectureDiagram project="retail" /> }
+export function CrickXArchitecture() { return <ArchitectureDiagram project="crickx" /> }

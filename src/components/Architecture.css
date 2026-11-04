@@ -1,0 +1,8 @@
+.project-architecture-diagram{margin:0;width:100%;min-width:0}
+.project-architecture-diagram>a{display:block;line-height:0}
+.project-architecture-diagram img{display:block;width:100%;height:auto;border-radius:12px}
+.project-architecture-diagram figcaption{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:14px 28px;margin-top:18px;font-size:13px;line-height:1.7;color:var(--muted)}
+.project-architecture-diagram figcaption>span{flex:1 1 420px}
+.project-architecture-diagram figcaption>a{color:#9c95eb;white-space:nowrap}
+.project-architecture-diagram a:focus-visible{outline:2px solid #9c95eb;outline-offset:5px}
+@media(max-width:620px){.project-architecture-diagram img{border-radius:7px}.project-architecture-diagram figcaption{font-size:12px;gap:10px}}
