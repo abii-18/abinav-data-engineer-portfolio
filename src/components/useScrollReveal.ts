@@ -10,7 +10,7 @@ export function useScrollReveal(path: string) {
     if (preference.matches) return
 
     const sections = Array.from(main.querySelectorAll<HTMLElement>(
-      ':scope > section:not(.journal-hero), :scope > .journal-hero > p, :scope > .journal-hero > .achievement-marquee, :scope > header, :scope > .data-motion-group > section, :scope > .project-listings > a, .experience-section-heading, .experience-timeline-item, .featured-projects-heading, .featured-project-card, .tech-stack-heading, .tech-stack-group',
+      ':scope > section:not(.journal-hero):not(.smh-root), :scope > .journal-hero > p, :scope > .journal-hero > .achievement-marquee, :scope > header, :scope > .data-motion-group > section, :scope > .project-listings > a, .experience-section-heading, .experience-timeline-item, .featured-projects-heading, .featured-project-card, .tech-stack-heading, .tech-stack-group',
     )).filter(section => !section.querySelector('.experience-timeline, .featured-projects-grid, .tech-stack-groups'))
     const reveal = (section: HTMLElement) => {
       section.dataset.scrollReveal = 'visible'
