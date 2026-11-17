@@ -1,4 +1,3 @@
-import { CountUpValue } from './CountUpValue'
 import { useEffect, useRef, useState } from 'react'
 import './DataInMotion.css'
 
@@ -217,9 +216,6 @@ function TransformationMatrix({ seconds }: { seconds: number }) {
     <rect x="274" y="103" width="152" height="90" rx="16" fill="#1a1a1a" stroke="#858585"/><text x="350" y="141" textAnchor="middle" fill="#f5f5f5" fontSize="16" fontWeight="700">TRANSFORM</text><text x="350" y="168" textAnchor="middle" fill="#aaaaaa" fontSize="11">PYSPARK / SQL</text><text x="93" y="156" textAnchor="middle" fill="#d0d0d0" fontSize="13">RAW</text><text x="608" y="156" textAnchor="middle" fill="#d0d0d0" fontSize="13">CURATED</text>
   </svg><div className="motion-progress-label"><span>RAW → TRANSFORM → CURATED</span><span>{pct}%</span></div><div className="motion-progress"><i style={{width:pct+'%'}}/></div></div>
 }
-
-const achievementItems = [["50M+","Financial records / day"],["99.9%","Pipeline success rate"],["150+","Production workflows"],["40%","Faster queries"],["3×","Faster data loads"],["25%","Fewer recurring issues"],["L3","Production ownership"],["SQL","Incremental loads & deduplication"],["AWS","S3 · Glue · Lambda · Monitoring"]]
-export function EngineeringImpact(){return <div className="achievement-marquee"><div className="achievement-head"><strong>ENGINEERING IMPACT</strong><span>PRODUCTION ACHIEVEMENTS</span></div><div className="achievement-window"><div className="achievement-track">{[...achievementItems,...achievementItems].map(([value,label],i)=><div className="achievement-card" key={i} aria-hidden={i>=achievementItems.length}><strong><CountUpValue value={value} decorative={i>=achievementItems.length} /></strong><span>{label}</span></div>)}</div></div><div className="achievement-bottom"><span>VIRTUSA / DATA ENGINEERING</span><i/></div></div>}
 
 export function DataInMotion() {
   const seconds = useMotion()

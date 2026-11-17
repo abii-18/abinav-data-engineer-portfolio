@@ -1,0 +1,202 @@
+.ei {
+  --ei-bg: #0b0b0e;
+  --ei-card: #141418;
+  --ei-line: #2a2a31;
+  --ei-text: #e8e8ea;
+  --ei-muted: #8b8b94;
+  --ei-accent: #5aa9ff;
+
+  background: var(--ei-bg);
+  border: 1px solid var(--ei-line);
+  border-radius: 16px;
+  padding: 18px;
+  color: var(--ei-text);
+  font-family: inherit;
+  overflow: hidden;
+}
+
+.ei *,
+.ei *::before,
+.ei *::after {
+  box-sizing: border-box;
+}
+
+.ei-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.ei-title {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.ei-sub {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ei-accent);
+}
+
+.ei-main {
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr);
+  gap: 10px;
+  align-items: stretch;
+}
+
+.ei-hero {
+  background: var(--ei-card);
+  border: 1px solid var(--ei-line);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.ei .ei-num-hero {
+  font-size: 40px;
+  color: var(--ei-accent);
+}
+
+.ei-fade {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+
+.ei-track {
+  display: flex;
+  gap: 10px;
+  width: max-content;
+  animation: ei-scroll 34s linear infinite;
+}
+
+.ei-track-rev {
+  animation-direction: reverse;
+  animation-duration: 26s;
+}
+
+.ei-fade:hover .ei-track,
+.ei-fade:focus-within .ei-track {
+  animation-play-state: paused;
+}
+
+.ei-clone {
+  display: contents;
+}
+
+@keyframes ei-scroll {
+  to {
+    /* Include half the inter-item gap so the duplicated sequence joins without a jump. */
+    transform: translateX(calc(-50% - 5px));
+  }
+}
+
+.ei-card {
+  flex: 0 0 auto;
+  width: 172px;
+  background: var(--ei-card);
+  border: 1px solid var(--ei-line);
+  border-radius: 12px;
+  padding: 14px;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.ei-card:hover {
+  border-color: var(--ei-accent);
+  transform: translateY(-2px);
+}
+
+.ei-num {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.ei-label {
+  font-size: 12.5px;
+  color: var(--ei-muted);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+.ei-ctx {
+  font-size: 11px;
+  color: var(--ei-accent);
+  margin-top: 10px;
+  font-family: ui-monospace, Menlo, monospace;
+}
+
+.ei-row2 {
+  margin-top: 10px;
+}
+
+.ei-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--ei-line);
+  background: var(--ei-card);
+  color: #c4c4cc;
+  white-space: nowrap;
+}
+
+.ei-tag::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--ei-accent);
+}
+
+.ei-foot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ei-muted);
+}
+
+.ei-foot i {
+  flex: 1;
+  height: 1px;
+  background: var(--ei-line);
+}
+
+@media (max-width: 640px) {
+  .ei-main {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ei-track {
+    animation: none;
+  }
+  .ei-fade {
+    overflow-x: auto;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
+
+/* Reduced-motion rows retain only the original content and support keyboard/native horizontal scrolling. */
+.ei-fade:focus-visible { outline: 2px solid var(--ei-accent); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) {
+  .ei-clone { display: none; }
+  .ei-card { transition: none; }
+  .ei-card:hover { transform: none; }
+}
