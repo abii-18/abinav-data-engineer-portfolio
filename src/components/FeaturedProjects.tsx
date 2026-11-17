@@ -1,9 +1,4 @@
-import { MotionText } from './MotionText'
-import { ArrowUpRight } from 'lucide-react'
-import './FeaturedProjects.css'
-
-// Local brand assets keep project technology rows consistent without runtime icon downloads.
-const technologyLogos: Record<string, string> = { Python: 'python', Django: 'django', React: 'react', TypeScript: 'typescript', Databricks: 'databricks', 'Spark SQL': 'apache-spark', Parquet: 'apacheparquet', Airflow: 'airflow-icon', PySpark: 'apache-spark', Snowflake: 'snowflake-icon', dbt: 'dbt-icon', Kafka: 'kafka-icon', PostgreSQL: 'postgresql', Streamlit: 'streamlit', Docker: 'docker-icon', Prometheus: 'prometheus', Grafana: 'grafana' }
+import FeaturedGallery from './FeaturedGallery/FeaturedGallery'
 
 // Keep featured order shared with the full project directory.
 export const projects = [
@@ -37,17 +32,7 @@ export const projects = [
   },
 ]
 
-/** Render the ordered project collection using the existing responsive card system. */
+/** Render the gallery while sharing canonical project content with the project directory. */
 export function FeaturedProjects() {
-  return <section className="featured-projects" aria-labelledby="featured-projects-title">
-    <header className="featured-projects-heading"><p>PROJECTS</p><h2 id="featured-projects-title"><MotionText text="Featured Projects" /></h2><span>Data systems I’ve designed and built</span></header>
-    <div className="featured-projects-grid">{projects.map(project => <article className="featured-project-card" key={project.name}>
-      <div className="featured-project-top"><h3>{project.name}</h3><span className="featured-project-category">{project.category}</span></div>
-      <p className="featured-project-subtitle">{project.subtitle}</p>
-      <p className="featured-project-description">{project.description}</p>
-      <ul>{project.highlights.map(highlight => <li key={highlight}>{highlight}</li>)}</ul>
-      <div className="featured-project-tags" aria-label="Technologies">{project.technologies.map(tech => <span key={tech} title={tech}>{technologyLogos[tech] ? <img src={`/logos/${technologyLogos[tech]}.svg`} width={22} height={22} alt={tech} loading="lazy"/> : <span className="featured-tech-wordmark">{tech}</span>}</span>)}</div>
-      <footer className="featured-project-links"><a href={project.source} target="_blank" rel="noopener noreferrer"><img src="/logos/github-icon.svg" width={17} height={17} alt="" aria-hidden="true"/> Source</a><a href={project.details} target={project.details.startsWith('https://') ? '_blank' : undefined} rel={project.details.startsWith('https://') ? 'noopener noreferrer' : undefined}><ArrowUpRight size={15} aria-hidden="true"/> {project.detailsLabel || 'Case study'}</a></footer>
-    </article>)}</div>
-  </section>
+  return <FeaturedGallery projects={projects} />
 }
