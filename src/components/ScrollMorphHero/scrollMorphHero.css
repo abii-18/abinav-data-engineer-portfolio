@@ -1,5 +1,6 @@
 /* Scoped styling adapts the supplied Scroll Morph Hero to the existing portfolio theme. */
-.smh-root{position:relative;height:220svh;margin-bottom:48px;color:var(--ink);background:var(--bg)}
+/* A short scroll runway reveals the arc without holding visitors on the first screen. */
+.smh-root{position:relative;height:120svh;margin-bottom:48px;color:var(--ink);background:var(--bg)}
 .smh-stage{position:sticky;top:76px;height:calc(100svh - 76px);min-height:0;overflow:hidden;isolation:isolate;background:radial-gradient(ellipse at 50% 50%,#9c95eb09,transparent 62%)}
 .smh-intro{position:absolute;z-index:2;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;width:min(360px,56%);transition:opacity .6s ease}
 .smh-eyebrow{font:10px 'DM Mono',monospace;letter-spacing:.22em;color:var(--muted);margin:0 0 12px}
