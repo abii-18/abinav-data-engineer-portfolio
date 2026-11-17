@@ -11,7 +11,7 @@ function GalleryColumn({ projects, column, progress, reduced }: {
   const y = useTransform(progress, [0, 1], column === 1 ? ['12%', '-4%'] : ['-5%', '3%'])
   return <motion.div className="fg-image-column" style={reduced ? undefined : { y }}>
     {projects.map((project, index) => index % 3 === column && <a key={project.name} href={project.details} aria-label={`Explore ${project.name}`}>
-      <img src={`/projects/project-cover-${index}.svg`} alt={`${project.name} — project title and technology stack`} width="900" height="340" loading="lazy" />
+      <img src={`/projects/project-cover-${index}.svg`} alt={`${project.name} — project title and technology stack`} width="900" height="660" loading="lazy" />
     </a>)}
   </motion.div>
 }
