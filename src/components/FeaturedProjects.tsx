@@ -2,7 +2,8 @@ import { MotionText } from './MotionText'
 import { ArrowUpRight } from 'lucide-react'
 import './FeaturedProjects.css'
 
-const technologyLogos: Record<string, string> = { Python: 'python', Airflow: 'airflow-icon', PySpark: 'apache-spark', Snowflake: 'snowflake-icon', dbt: 'dbt-icon', Kafka: 'kafka-icon', PostgreSQL: 'postgresql', Streamlit: 'streamlit', Docker: 'docker-icon', Prometheus: 'prometheus', Grafana: 'grafana' }
+// Local brand assets keep project technology rows consistent without runtime icon downloads.
+const technologyLogos: Record<string, string> = { Python: 'python', Django: 'django', React: 'react', TypeScript: 'typescript', Databricks: 'databricks', 'Spark SQL': 'apache-spark', Parquet: 'apacheparquet', Airflow: 'airflow-icon', PySpark: 'apache-spark', Snowflake: 'snowflake-icon', dbt: 'dbt-icon', Kafka: 'kafka-icon', PostgreSQL: 'postgresql', Streamlit: 'streamlit', Docker: 'docker-icon', Prometheus: 'prometheus', Grafana: 'grafana' }
 
 // Keep featured order shared with the full project directory.
 export const projects = [
