@@ -7,3 +7,7 @@
 /* Keyboard navigation flattens the surface immediately, keeping focused links easy to locate. */
 .fg-surface:focus-within>div{transform:none!important}
 @media(max-width:680px),(prefers-reduced-motion:reduce){.fg-surface>div{transform:none!important}}
+
+/* Exactly one cover and one destination per project. */
+.fg-image-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}.fg-image-grid a{display:block;min-width:0}.fg-image-grid img{display:block;width:100%;height:auto;border-radius:16px}
+@media(max-width:680px){.fg-image-grid{grid-template-columns:1fr}}
