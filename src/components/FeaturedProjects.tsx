@@ -4,7 +4,8 @@ import './FeaturedProjects.css'
 
 const technologyLogos: Record<string, string> = { Python: 'python', Airflow: 'airflow-icon', PySpark: 'apache-spark', Snowflake: 'snowflake-icon', dbt: 'dbt-icon', Kafka: 'kafka-icon', PostgreSQL: 'postgresql', Streamlit: 'streamlit', Docker: 'docker-icon', Prometheus: 'prometheus', Grafana: 'grafana' }
 
-const projects = [
+// Keep featured order shared with the full project directory.
+export const projects = [
   {
     name: 'Retail Sales Lakehouse', category: 'Batch pipeline', subtitle: 'End-to-end incremental data platform',
     description: 'An end-to-end batch platform connecting incremental ingestion, distributed processing, cloud warehousing, and dimensional models. Built to turn raw transactional data into validated, analytics-ready datasets.',
@@ -19,8 +20,23 @@ const projects = [
     technologies: ['Python', 'Kafka', 'PySpark', 'PostgreSQL', 'Streamlit', 'Docker', 'Prometheus', 'Grafana'],
     source: 'https://github.com/abii-18/CrickX', details: '/projects/crickx',
   },
+  {
+    name: 'RoleGraph', category: 'Job data platform', subtitle: 'An evidence-backed index for job discovery',
+    description: 'A Django and React application for discovering, indexing, and monitoring jobs across applicant tracking systems and job boards. Connects canonical job records to original postings and source evidence.',
+    highlights: ['Complete-feed validation, failure rollback, and suspicious-drop quarantine', 'Canonical job records with source appearances and lifecycle history', 'Search, coverage inspection, and a map-led interface with analytics previews'],
+    technologies: ['Python', 'Django', 'PostgreSQL', 'React', 'TypeScript', 'Docker'],
+    source: 'https://github.com/abii-18/RoleGraph', details: 'https://github.com/abii-18/RoleGraph#readme', detailsLabel: 'Project overview',
+  },
+  {
+    name: 'PySpark Retail Analytics', category: 'Batch analytics', subtitle: 'Retail analytics on the Databricks platform',
+    description: 'A Databricks notebook project exploring PySpark batch-processing patterns on retail data. Moves from typed ingestion and cleaned datasets to customer metrics, product analysis, and segmentation.',
+    highlights: ['Explicit schemas, CSV ingestion, and Bronze / Silver / Gold-style layers', 'Multi-table joins, aggregations, and window-based customer segmentation', 'Parquet output, partitioning concepts, and execution-plan inspection'],
+    technologies: ['Databricks', 'Python', 'PySpark', 'Spark SQL', 'Parquet'],
+    source: 'https://github.com/abii-18/retail-pyspark-analytics', details: 'https://github.com/abii-18/retail-pyspark-analytics#readme', detailsLabel: 'Project overview',
+  },
 ]
 
+/** Render the ordered project collection using the existing responsive card system. */
 export function FeaturedProjects() {
   return <section className="featured-projects" aria-labelledby="featured-projects-title">
     <header className="featured-projects-heading"><p>PROJECTS</p><h2 id="featured-projects-title"><MotionText text="Featured Projects" /></h2><span>Data systems I’ve designed and built</span></header>
@@ -30,7 +46,7 @@ export function FeaturedProjects() {
       <p className="featured-project-description">{project.description}</p>
       <ul>{project.highlights.map(highlight => <li key={highlight}>{highlight}</li>)}</ul>
       <div className="featured-project-tags" aria-label="Technologies">{project.technologies.map(tech => <span key={tech} title={tech}>{technologyLogos[tech] ? <img src={`/logos/${technologyLogos[tech]}.svg`} width={22} height={22} alt={tech} loading="lazy"/> : <span className="featured-tech-wordmark">{tech}</span>}</span>)}</div>
-      <footer className="featured-project-links"><a href={project.source} target="_blank" rel="noopener noreferrer"><img src="/logos/github-icon.svg" width={17} height={17} alt="" aria-hidden="true"/> Source</a><a href={project.details}><ArrowUpRight size={15} aria-hidden="true"/> Case study</a></footer>
+      <footer className="featured-project-links"><a href={project.source} target="_blank" rel="noopener noreferrer"><img src="/logos/github-icon.svg" width={17} height={17} alt="" aria-hidden="true"/> Source</a><a href={project.details} target={project.details.startsWith('https://') ? '_blank' : undefined} rel={project.details.startsWith('https://') ? 'noopener noreferrer' : undefined}><ArrowUpRight size={15} aria-hidden="true"/> {project.detailsLabel || 'Case study'}</a></footer>
     </article>)}</div>
   </section>
 }
