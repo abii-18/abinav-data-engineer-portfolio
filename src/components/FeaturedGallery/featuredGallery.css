@@ -1,18 +1,9 @@
-/* One consistent card grid keeps covers readable and the project collection easy to scan. */
+/* Original project cards are the covers; a single aligned grid avoids duplicate imagery. */
 .fg-root{padding:48px 0 86px;color:var(--ink)}
-.fg-head{margin-bottom:32px}.fg-head>p{font:10px 'DM Mono',monospace;letter-spacing:.18em;color:var(--accent);margin:0 0 14px}
+.fg-head{text-align:center;margin-bottom:40px}.fg-head>p{font:10px 'DM Mono',monospace;letter-spacing:.18em;color:var(--accent);margin:0 0 14px}
 .fg-head h2{font:600 clamp(32px,4vw,48px)/1.15 Inter,Manrope,Arial,sans-serif;letter-spacing:-.045em;margin:0 0 12px}.fg-head>span{font-size:15px;color:var(--muted)}
-.fg-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
-.fg-project{border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;background:color-mix(in srgb,var(--ink) 2%,var(--bg))}
-/* Brand accents define each cover without relying on unreadable screenshot text. */
-.fg-cover{--cover-accent:#6edbd4;position:relative;display:flex;flex-direction:column;justify-content:space-between;min-height:240px;padding:26px;background:radial-gradient(ellipse at 50% 65%,color-mix(in srgb,var(--cover-accent) 14%,transparent),transparent 70%),#0d111b;border-bottom:1px solid var(--line);color:#f1f3fa}
-.fg-violet{--cover-accent:#b49aff}.fg-orange{--cover-accent:#ffac78}.fg-blue{--cover-accent:#81afff}
-.fg-cover-label{font:10px 'DM Mono',monospace;letter-spacing:.18em;color:var(--cover-accent)}
-.fg-flow{display:flex;align-items:center;justify-content:center;gap:36px;margin:30px 0}
-.fg-node{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;width:100px;height:104px;border:1px solid color-mix(in srgb,var(--cover-accent) 25%,#232939);border-radius:14px;background:linear-gradient(145deg,#ffffff09,#ffffff02);box-shadow:0 8px 24px #0002}
-.fg-node:not(:last-child):after{content:'';position:absolute;left:100%;top:50%;width:37px;height:1px;background:var(--cover-accent);opacity:.5}
-.fg-node img{object-fit:contain}.fg-node img[src$="kafka-icon.svg"]{filter:brightness(0) invert(.85)}.fg-node>span{font-size:11px;color:#c8cedf}
-.fg-cover-note{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#919cb4}.fg-cover-note>span{font-size:18px;color:var(--cover-accent)}
-.fg-body{padding:26px;display:flex;flex-direction:column;flex:1}.fg-category{font:10px 'DM Mono',monospace;color:var(--accent);margin:0 0 12px}.fg-body h3{font-size:24px;letter-spacing:-.035em;margin:0 0 14px}.fg-description{font-size:14px;line-height:1.8;color:var(--muted);margin:0 0 20px}.fg-tools{font-size:11px;line-height:1.8;color:var(--muted);margin:auto 0 20px}.fg-body footer{border-top:1px solid var(--line);padding-top:18px;display:flex;gap:24px;font-size:12px;color:var(--accent)}
-.fg-root a:focus-visible{outline:2px solid var(--accent);outline-offset:-3px}.fg-body footer a:focus-visible{outline-offset:4px}
-@media(max-width:680px){.fg-grid{grid-template-columns:1fr}.fg-cover{min-height:200px;padding:20px}.fg-flow{gap:20px}.fg-node{width:80px;height:92px}.fg-node:not(:last-child):after{width:21px}.fg-body{padding:22px}}
+.fg-surface{perspective:1200px;perspective-origin:center top}.fg-surface>div{transform-origin:center top}
+.fg-root a:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+/* Keyboard navigation flattens the surface immediately, keeping focused links easy to locate. */
+.fg-surface:focus-within>div{transform:none!important}
+@media(max-width:680px),(prefers-reduced-motion:reduce){.fg-surface>div{transform:none!important}}
