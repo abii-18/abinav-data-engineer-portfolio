@@ -7,7 +7,6 @@
 .smh-intro h1{font-family:Inter,Manrope,Arial,sans-serif;font-size:clamp(30px,4.8vw,64px);letter-spacing:-.06em;line-height:1.05;margin:0;font-weight:650}
 .smh-intro h1>span{color:var(--accent)}
 .smh-role{color:var(--ink);font-size:16px;margin:12px 0}
-.smh-caption{color:var(--muted);font-size:13px;line-height:1.7;margin:0}
 .smh-explore{display:inline-flex;gap:14px;align-items:center;font-size:11px;margin-top:18px;color:var(--accent)}
 .smh-explore:focus-visible{outline:2px solid var(--accent);outline-offset:6px}
 .smh-arc-content{position:absolute;z-index:2;top:10%;width:100%;text-align:center;pointer-events:none}
@@ -27,7 +26,7 @@
 .smh-reduced .smh-intro{position:relative;top:auto;left:auto;transform:none;width:100%;margin-bottom:40px}
 .smh-reduced .smh-cards{position:relative;top:auto;left:auto;display:flex;flex-wrap:wrap;justify-content:center;gap:12px;max-width:760px;margin:auto}
 .smh-reduced .smh-card{position:relative;top:auto;left:auto}
-@media(max-width:620px){.smh-stage{top:64px;height:calc(100svh - 64px);min-height:0}.smh-intro{width:52%}.smh-role{font-size:12px}.smh-caption{font-size:11px}.smh-eyebrow{font-size:8px}.smh-arc-content>p:last-child{padding:0 20px;font-size:11px}}
+@media(max-width:620px){.smh-stage{top:64px;height:calc(100svh - 64px);min-height:0}.smh-intro{width:52%}.smh-role{font-size:12px}.smh-eyebrow{font-size:8px}.smh-arc-content>p:last-child{padding:0 20px;font-size:11px}}
 @media(prefers-reduced-motion:reduce){.smh-intro,.smh-card-inner{transition:none}}
 
 /* The Kafka wordmark is dark in its original asset; lift it for the dark surface. */

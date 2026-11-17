@@ -86,7 +86,6 @@ export default function ScrollMorphHero() {
         <p className="smh-eyebrow">HELLO, I’M</p>
         <h1>Abinav S<span>.</span></h1>
         <p className="smh-role">Data Engineer</p>
-        <p className="smh-caption">Know your data,<br />own your outcomes.</p>
         <a href="#engineering-impact" className="smh-explore">Explore my work <span aria-hidden="true">↓</span></a>
       </div>
       <div className="smh-arc-content" style={{ opacity: reduced ? 0 : Math.max(0, (morph - .55) / .45), visibility: morph > .55 ? 'visible' : 'hidden' }}>
