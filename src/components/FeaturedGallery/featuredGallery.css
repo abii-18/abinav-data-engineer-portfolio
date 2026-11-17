@@ -8,6 +8,15 @@
 .fg-surface:focus-within>div{transform:none!important}
 @media(max-width:680px),(prefers-reduced-motion:reduce){.fg-surface>div{transform:none!important}}
 
-/* Exactly one cover and one destination per project. */
-.fg-image-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}.fg-image-grid a{display:block;min-width:0}.fg-image-grid img{display:block;width:100%;height:auto;border-radius:16px}
-@media(max-width:680px){.fg-image-grid{grid-template-columns:1fr}}
+/* Reference-style staggered columns retain exactly one image per project. */
+.fg-surface{overflow:clip;padding:40px 0 70px}
+.fg-image-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;transform-style:preserve-3d}
+.fg-image-column{display:flex;flex-direction:column;gap:16px;min-width:0}
+.fg-image-column:nth-child(2){padding-top:70px}
+.fg-image-column a{display:block;min-width:0;transition:filter .2s}
+.fg-image-column a:hover{filter:brightness(1.1)}
+.fg-image-column img{display:block;width:100%;height:auto;border-radius:14px}
+/* Focused links and reduced-motion views stay flat and readable. */
+.fg-surface:focus-within .fg-image-column{transform:none!important}
+@media(max-width:680px){.fg-image-grid{grid-template-columns:1fr}.fg-image-column,.fg-image-column:nth-child(2){transform:none!important;padding-top:0}.fg-surface{padding:0 0 20px}}
+@media(prefers-reduced-motion:reduce){.fg-image-column{transform:none!important}.fg-image-column:nth-child(2){padding-top:0}.fg-image-column a{transition:none}}
